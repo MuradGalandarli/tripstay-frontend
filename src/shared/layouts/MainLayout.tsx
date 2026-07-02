@@ -5,10 +5,14 @@ import Footer from '../../components/Footer/Footer'
 
 const MainLayout = () => {
   return (
-    <div>
-      <Header/>
+    <div className='grid grid-cols-[3%_94%_3%]'>
+      <div></div>
+     <div>
+       <Header/>
       <Outlet/>
       <Footer/>
+     </div>
+        <div></div>
       
     </div>
   )
