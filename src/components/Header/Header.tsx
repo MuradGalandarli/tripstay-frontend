@@ -5,14 +5,14 @@ import { useState, useEffect } from "react";
 
 const Header = () => {
 
-  const [isScrolled, setScrolled] = useState(false);
+  const [isScrolled, setScrolled] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
       console.log(window.scrollY);
       console.log(isScrolled);
 
-      setScrolled(window.scrollY < 50);
+      setScrolled(window.scrollY < 20);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -26,16 +26,16 @@ const Header = () => {
     <div>
 
       <header>
-        <div className="fixed top-0 left-0 w-full ">
+        <div className="fixed top-0 left-0 w-full z-20 bg-[#fcfeff]">
 
-          <div className='w-[100%] h-[1px] bg-[#e6e6e6]'> </div>
-          <div className={`w-[100%] ${!isScrolled ? "h-[100px]" : "h-[200px] bg-[#fcfcfc]"}`}>
+          <div className='w-[100%] h-[1px] bg-[#f0f3f7]'> </div>
+          <div className={`w-[100%] ${!isScrolled ? "h-[100px]" : "h-[200px] bg-[#fcfeff]"}`}>
 
             <div className=" flex justify-center">
               <div className='w-[94%] h-[100px] flex justify-between'>
 
                 <div className="w-[350px] h-[100px] flex items-center">
-                  <img src={logo} alt="logo" />
+                  <img className="bg-[#f0f3f7]" src={logo} alt="logo" />
                 </div>
 
                 {isScrolled &&
