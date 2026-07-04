@@ -9,8 +9,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log(window.scrollY);
-      console.log(isScrolled);
+      // console.log(window.scrollY);
+      // console.log(isScrolled);
 
       setScrolled(window.scrollY < 20);
     };
