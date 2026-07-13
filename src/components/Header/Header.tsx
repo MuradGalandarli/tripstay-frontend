@@ -2,10 +2,12 @@ import { HiOutlineBars4 } from "react-icons/hi2";
 import logo from "../../assets/logo/image.png"
 import { IoSearchSharp } from "react-icons/io5";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
 
   const [isScrolled, setScrolled] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,7 +81,7 @@ const Header = () => {
                   <h1 className="text-[12px]">Seyahat moduna geçin</h1>
                   <div>
                     <div className="flex gap-2">
-                      <div className="w-[40px] h-[40px] rounded-[100%] bg-amber-200 flex items-center justify-center">
+                      <div onClick={() => navigate("/login")} className="w-[40px] h-[40px] rounded-[100%] bg-amber-200 flex items-center justify-center">
                         <h1>M</h1>
                       </div>
                       <div className="w-[40px] h-[40px] rounded-[100%] bg-[#e3dfde] flex items-center justify-center">
@@ -109,9 +111,9 @@ const Header = () => {
                     <p >Yer</p>
                     <p className="text-[#b5b0b0]">Gidilecek yerleri arayin</p>
                   </div>
- <div className="w-[40px] h-[40px] rounded-[100%] bg-[#c7283d] flex items-center justify-center">
-                      <IoSearchSharp className="text-white" />
-                    </div>
+                  <div className="w-[40px] h-[40px] rounded-[100%] bg-[#c7283d] flex items-center justify-center">
+                    <IoSearchSharp className="text-white" />
+                  </div>
 
                 </div>
               </div>
