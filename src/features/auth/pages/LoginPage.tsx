@@ -1,6 +1,39 @@
+import { useState } from "react";
+import { useLoginMutation } from "../api/authApi"
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../../shared/hooks/useAppSelector";
+import { setAccessToken } from "../slice/authSlice";
+import { useAppSelector } from "../../../shared/hooks/useAppDispatch";
 
 
 const LoginPage = () => {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [login] = useLoginMutation();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const auth = useAppSelector((state)=>(state.auth))
+
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const result = await login({
+
+            "username": email,
+            "password": password
+
+        });
+        debugger;
+        if('data' in result)
+        dispatch(setAccessToken(result.data))
+
+       
+       
+    }
+
+ console.log(auth);
     return (
         <div>
 
@@ -10,17 +43,17 @@ const LoginPage = () => {
 
                 <div className="flex flex-col w-[35%] h-[350px] bg-amber-100 rounded-3xl flex items-center justify-center">
                     <div className="w-[100%] h-[300px] flex flex-col justify-center items-center">
-                        <form action="" className="flex flex-col gap-[18px]">
-                            <input className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50 rounded-[9px]" type="text" name="email" placeholder="Email" />
-                            <input className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50  bg-amber-50 rounded-[9px]" type="text" name="password" placeholder="Password" />
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-[18px]">
+                            <input value={email} onChange={(e) => { setEmail(e.target.value) }} className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50 rounded-[9px]" type="text" name="email" placeholder="Email" />
+                            <input value={password} onChange={(e) => { setPassword(e.target.value) }} className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50  bg-amber-50 rounded-[9px]" type="text" name="password" placeholder="Password" />
 
                             <input type="submit" value="Sign Up" className="w-[380px] h-[40px]  bg-amber-50 rounded-[9px]" />
                         </form>
                     </div>
-                <div className="w-[90%] flex  justify-between">
-<p>Forgot your password?</p>
-<p>Register</p>
-                </div>
+                    <div className="w-[90%] flex  justify-between">
+                        <p >Forgot your password?</p>
+                        <p onClick={() => { navigate("/register") }}>Register</p>
+                    </div>
                 </div>
             </div>
         </div>
