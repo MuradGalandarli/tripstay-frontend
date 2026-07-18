@@ -3,16 +3,21 @@ import logo from "../../assets/logo/image.png"
 import { IoSearchSharp } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import LanguageSelectors from "../../features/language/selectors/LanguageSelectors"
+import { TbWorld } from "react-icons/tb";     
+import { FaRegHeart } from "react-icons/fa";
+import { RiLogoutBoxLine } from "react-icons/ri";
+import { FiMessageSquare } from "react-icons/fi";
 
 const Header = () => {
 
   const [isScrolled, setScrolled] = useState(true);
+  const [profileMenu, setProfileMenu] = useState(false);
+  const [language, setLanguage] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      // console.log(window.scrollY);
-      // console.log(isScrolled);
 
       setScrolled(window.scrollY < 20);
     };
@@ -84,10 +89,34 @@ const Header = () => {
                       <div onClick={() => navigate("/login")} className="w-[40px] h-[40px] rounded-[100%] bg-amber-200 flex items-center justify-center">
                         <h1>M</h1>
                       </div>
-                      <div className="w-[40px] h-[40px] rounded-[100%] bg-[#e3dfde] flex items-center justify-center">
+                      <div onClick={() => { setProfileMenu(!profileMenu) }} className="w-[40px] h-[40px] rounded-[100%] relative bg-[#e3dfde] flex items-center justify-center">
                         <HiOutlineBars4 />
                       </div>
-                    </div>
+                      {
+                        profileMenu && (
+                          <div className="absolute top-[80px] right-[40px] w-[250px] h-[0px] rounded-2xl shadow-xl/30 bg-white">
+                            <ul className="p-7 flex flex-col gap-3  bg-white">
+
+                               <li className="flex items-center gap-2" > <FaRegHeart /> Favoriler</li>
+                              <li className="flex items-center gap-2" onClick={() => (setLanguage(true), setProfileMenu(!profileMenu))}><TbWorld /> Language  </li>
+                              <li className="flex items-center gap-2"><RiLogoutBoxLine /> Otrumu kapat</li>
+                             
+                            </ul>
+
+                          </div>
+                        )
+                      }
+                      {
+                        language && (
+
+                          <div className="absolute top-20 right-70">
+                          
+                            <LanguageSelectors onClose={()=>setLanguage(false)} />
+                          </div>
+                        )
+                      }
+
+                    </div> 
                   </div>
                 </div>
               </div>
@@ -124,8 +153,8 @@ const Header = () => {
 
 
         <div className={`${isScrolled ? "h-[200px]" : "h-[200px]"}`}></div>
-
       </header>
+
     </div>
   )
 }

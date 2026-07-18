@@ -1,6 +1,6 @@
-import { useAppDispatch } from "../../../shared/hooks/useAppSelector";
+import { useAppDispatch } from "../../../shared/hooks/useAppDispatch";
 import { setAccessToken } from "../slice/authSlice";
-import { useAppSelector } from "../../../shared/hooks/useAppDispatch";
+import { useAppSelector } from "../../../shared/hooks/useAppSelector";
 import { useState } from "react";
 import { useLoginMutation } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
