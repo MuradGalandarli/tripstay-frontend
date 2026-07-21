@@ -2,8 +2,7 @@ import { useAppDispatch } from "../../../shared/hooks/useAppDispatch"
 import { setLanguage } from "../slice/languageSlice";
 import type { close } from "../types/LanguageSelectorsType";
 import { useGetLanguagesQuery } from "../api/languageApi"
-
-
+import { baseApi } from "../../../shared/api/baseApi";
 
 const LanguageSelectors = ({ onClose }: close) => {
   const dispatch = useAppDispatch();
@@ -11,11 +10,11 @@ const LanguageSelectors = ({ onClose }: close) => {
   const result = useGetLanguagesQuery();
   console.log(result?.data?.data)
 
-
   const handleLanguage = (languageCode: string) => {
     console.log(languageCode);
     dispatch(setLanguage(languageCode));
-
+     dispatch(baseApi.util.resetApiState());
+   onClose();
   }
 
   return (
