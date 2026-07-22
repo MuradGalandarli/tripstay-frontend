@@ -1,9 +1,21 @@
 import { TbWorld } from "react-icons/tb";
 import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
+import { useGetTranslationQuery } from "../../features/translation/Api/translationApi"
+import { useAppSelector } from "../../shared/hooks/useAppSelector"
 
 
 const Footer = () => {
+
+const result = useGetTranslationQuery();
+const languageCountry = useAppSelector((state)=>(state.language))
+
+  const translation = result?.data?.data;
+console.log(result.data);
+
+
+
+
   return (
     <footer>
       <div className="w-[100%] h-[550px] bg-[#f2f6f7] flex justify-center">
@@ -11,43 +23,43 @@ const Footer = () => {
           <div className="w-[100%] h-[400px] flex items-center" >
             <div className="w-[35%] h-[300px] flex flex-col gap-3 ">
 
-              <h1 className="font-[500]">Destek</h1>
+              <h1 className="font-[500]">{translation?.["footer.support.Title "]}</h1>
               <ul className="flex flex-col gap-2.5">
-                <li><a className="hover:underline" href="#">Yardım Merkezi</a></li>
-                <li><a className="hover:underline" href="#">Güvenlik sorunuyla ilgili yardım alın</a></li>
-                <li><a className="hover:underline" href="#">AirCover</a></li>
-                <li><a className="hover:underline" href="#">Ayrımcılık yapmama</a></li>
-                <li><a className="hover:underline" href="#">Engellilik desteği</a></li>
-                <li><a className="hover:underline" href="#">İptal seçenekleri</a></li>
-                <li><a className="hover:underline" href="#">Semtinizdeki sorunu bildirin</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.support.HelpCenter "]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.support.SecurityHelp"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.support.AirCover"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.support.NonDiscrimination"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.support.Accessibility"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.support.CancellationOptions"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.support.ReportNeighborhood"]}</a></li>
               </ul>
             </div>
 
             <div className="w-[35%] h-[300px] flex flex-col gap-3 ">
 
-              <h1 className="font-[500]">Ev sahipliği</h1>
+              <h1 className="font-[500]">{translation?.["footer.hosting.Hosting"]}</h1>
               <ul className="flex flex-col gap-2.5">
-                <li><a className="hover:underline" href="#">Evinizi Airbnb'ye taşıyın</a></li>
-                <li><a className="hover:underline" href="#">Ev sahipleri için AirCover</a></li>
-                <li><a className="hover:underline" href="#">Ev sahipliği kaynakları</a></li>
-                <li><a className="hover:underline" href="#">Topluluk forumu</a></li>
-                <li><a className="hover:underline" href="#">Sorumlu ev sahipliği</a></li>
-                <li><a className="hover:underline" href="#">Ücretsiz bir ilan sahipliği dersine katılın</a></li>
-                <li><a className="hover:underline" href="#">Yardımcı ilan sahibi bulun</a></li>
-                <li><a className="hover:underline" href="#">Bir ilan sahibi yönlendirin</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.ListYourHome"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.AirCoverForHosts"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.HostingResources"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.CommunityForum"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.ResponsibleHosting"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.FreeHostingClass"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.FindCoHost"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.hosting.ReferHost"]}</a></li>
               </ul>
             </div>
 
 
             <div className="w-[35%] h-[300px] flex flex-col gap-3 ">
 
-              <h1 className="font-[500]">Airbnb</h1>
+              <h1 className="font-[500]">{translation?.["footer.airbnb.About"]}</h1>
               <ul className="flex flex-col gap-2.5">
-                <li><a className="hover:underline" href="#">2026 Yaz Sürümü</a></li>
-                <li><a className="hover:underline" href="#">Basın odası</a></li>
-                <li><a className="hover:underline" href="#">Kariyer</a></li>
-                <li><a className="hover:underline" href="#">Yatırımcılar</a></li>
-                <li><a className="hover:underline" href="#">Airbnb.org acil konaklamaları</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.airbnb.SummerRelease2026"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.airbnb.PressRoom"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.airbnb.Careers"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.airbnb.Investors"]}</a></li>
+                <li><a className="hover:underline" href="#">{translation?.["footer.airbnb.AirbnbOrgEmergencyStays"]}</a></li>
 
               </ul>
             </div>
@@ -59,13 +71,13 @@ const Footer = () => {
               <div className="flex gap-2">
                 © 2026 Airbnb, Inc.
                 <ul className="flex gap-2.5 ">
-                  <li className="hover:underline"><a href="#">Gizlilik</a></li>
-                  <li className="hover:underline"><a href="#">Şartlar</a></li>
+                  <li className="hover:underline"><a href="#">{translation?.["footer.legal.Privacy"]}</a></li>
+                  <li className="hover:underline"><a href="#">{translation?.["footer.legal.Terms"]}</a></li>
                 </ul>
               </div>
               <div className="w-[250px] h-[25px] flex gap-3 items-center">
                 <TbWorld />
-                <h1 className="font-medium">Türkçe (TR)</h1>
+                <h1 className="font-medium">{languageCountry.languageName} ({languageCountry.languageCode})</h1>
                 <h1 className="font-medium">$ USD</h1>
                 <FaFacebook />
                 <h1>X</h1>
