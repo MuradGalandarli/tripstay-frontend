@@ -24,7 +24,6 @@ const RegisterForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 debugger
-console.log(newUser)
         const result = await register(newUser);
         
         if ('data' in result) {
@@ -33,7 +32,6 @@ console.log(newUser)
         }
     }
 
-    console.log(auth);
 
     return (
         <div>

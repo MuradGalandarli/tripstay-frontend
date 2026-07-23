@@ -11,10 +11,6 @@ const result = useGetTranslationQuery();
 const languageCountry = useAppSelector((state)=>(state.language))
 
   const translation = result?.data?.data;
-console.log(result.data);
-
-
-
 
   return (
     <footer>

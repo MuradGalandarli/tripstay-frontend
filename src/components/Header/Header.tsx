@@ -4,10 +4,14 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LanguageSelectors from "../../features/language/selectors/LanguageSelectors"
-import { TbWorld } from "react-icons/tb";     
+import { TbWorld } from "react-icons/tb";
 import { FaRegHeart } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useGetTranslationQuery } from "../../features/translation/Api/translationApi"
+import { useAppSelector } from "../../shared/hooks/useAppSelector";
+import { useLogoutMutation } from "../../features/auth/api/authApi";
+import { useAppDispatch } from "../../shared/hooks/useAppDispatch";
+import { logoutAction } from "../../features/auth/slice/authSlice"
 
 const Header = () => {
 
@@ -15,10 +19,43 @@ const Header = () => {
   const [profileMenu, setProfileMenu] = useState(false);
   const [language, setLanguage] = useState(false)
   const navigate = useNavigate();
-  
+  const [logout] = useLogoutMutation();
+
   const result = useGetTranslationQuery();
   const translation = result?.data?.data;
+  const dispatch = useAppDispatch();
+
+  let token = useAppSelector(
+    (state) => state.auth.accessToken
+  );
  
+
+ const payload = token
+    ? JSON.parse(atob(token.split(".")[1]))
+    : null;
+
+  const name = payload?.[
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+  ];
+
+
+
+  const handleLogout = async () => {
+    debugger
+    await logout().unwrap();
+    
+    dispatch(logoutAction());
+   
+    // navigate("/login")
+  }
+
+  const checkAuth = () => {
+
+    debugger;
+    token != null ? navigate("/listing") : navigate("/login")
+
+  }
+
   useEffect(() => {
     const handleScroll = () => {
 
@@ -86,11 +123,11 @@ const Header = () => {
                 </div>
 
                 <div className="w-[220px] h-[100px] flex gap-2 content-center items-center ">
-                  <h1 className="text-[12px]">{translation?.["header.Mod"]}</h1>
+                  <h1 onClick={() => (checkAuth())} className="text-[12px]">{ token == null ? translation?.["header.Mod"] : translation?.[ "heder.HomeMode"]}</h1>
                   <div>
                     <div className="flex gap-2">
                       <div onClick={() => navigate("/login")} className="w-[40px] h-[40px] rounded-[100%] bg-amber-200 flex items-center justify-center">
-                        <h1>M</h1>
+                        <h1>{name?.toUpperCase() == null ? <TbWorld /> : name[0]?.toUpperCase()}</h1>
                       </div>
                       <div onClick={() => { setProfileMenu(!profileMenu) }} className="w-[40px] h-[40px] rounded-[100%] relative bg-[#e3dfde] flex items-center justify-center">
                         <HiOutlineBars4 />
@@ -100,10 +137,10 @@ const Header = () => {
                           <div className="absolute top-[80px] right-[40px] w-[250px] h-[0px] rounded-2xl shadow-xl/30 bg-white">
                             <ul className="p-7 flex flex-col gap-3  bg-white">
 
-                               <li className="flex items-center gap-2" > <FaRegHeart /> Favoriler</li>
-                              <li className="flex items-center gap-2" onClick={() => (setLanguage(true), setProfileMenu(!profileMenu))}><TbWorld /> Language  </li>
-                              <li className="flex items-center gap-2"><RiLogoutBoxLine /> Otrumu kapat</li>
-                             
+                              <li className="flex items-center gap-2" > <FaRegHeart /> {translation?.["Menu.Favorites"]}</li>
+                              <li className="flex items-center gap-2" onClick={() => (setLanguage(true), setProfileMenu(!profileMenu))}><TbWorld /> {translation?.["Menu.Language"]}  </li>
+                              <li onClick={() => (handleLogout())} className="flex items-center gap-2"><RiLogoutBoxLine /> {translation?.["Menu.CloseSession"]}</li>
+
                             </ul>
 
                           </div>
@@ -113,13 +150,13 @@ const Header = () => {
                         language && (
 
                           <div className="absolute top-20 right-70">
-                          
-                            <LanguageSelectors onClose={()=>setLanguage(false)} />
+
+                            <LanguageSelectors onClose={() => setLanguage(false)} />
                           </div>
                         )
                       }
 
-                    </div> 
+                    </div>
                   </div>
                 </div>
               </div>
@@ -163,4 +200,8 @@ const Header = () => {
 }
 
 export default Header
+
+function dispatch(arg0: any) {
+  throw new Error("Function not implemented.");
+}
 

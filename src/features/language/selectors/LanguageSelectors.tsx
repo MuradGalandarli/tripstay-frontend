@@ -8,10 +8,8 @@ const LanguageSelectors = ({ onClose }: close) => {
   const dispatch = useAppDispatch();
 
   const result = useGetLanguagesQuery();
-  console.log(result?.data?.data)
-
+  
   const handleLanguage = (languageCode: string, languageName:string) => {
-    console.log(languageCode);
     dispatch(setLanguage({
       languageCode:languageCode,
       languageName:languageName

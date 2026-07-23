@@ -32,7 +32,6 @@ const LoginForm = () => {
         }
     }
 
-    console.log(auth);
 
     return (
         <div>
