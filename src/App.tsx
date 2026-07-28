@@ -5,10 +5,11 @@ import MainLayout from './shared/layouts/MainLayout'
 import Card from "./features/listingCard/page/Card"
 import LoginPage from './features/auth/pages/LoginPage'
 import RegisterPage from './features/auth/pages/RegisterPage'
-import CreateListing from './features/listing/components/CreateListing'
 import { setCredentials } from './features/auth/slice/authSlice'
 import { useAppDispatch } from './shared/hooks/useAppDispatch'
-import {useRefreshMutation}  from "./features/auth/api/authApi"
+import { useRefreshMutation } from "./features/auth/api/authApi"
+import CreatePropertyPage from './features/listing/page/CreatePropertyPage'
+import AmenitySelector from './features/listing/components/AmenitySelector'
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
     const initializeAuth = async () => {
       try {
         const data = await refresh().unwrap();
-debugger
+        debugger
 
         dispatch(
           setCredentials({
@@ -35,7 +36,7 @@ debugger
     initializeAuth();
   }, []);
 
- 
+
 
 
   return (
@@ -46,11 +47,11 @@ debugger
             <Route path='/' element={<Card />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
-            <Route path='/listing' element={<CreateListing />} />
+            <Route path='/amenity' element={<AmenitySelector />} />
           </Route>
+          <Route path='/listing' element={<CreatePropertyPage />} />
         </Routes>
       </BrowserRouter>
-
     </>
   )
 }

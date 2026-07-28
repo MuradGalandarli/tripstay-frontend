@@ -79,13 +79,9 @@ const languageCountry = useAppSelector((state)=>(state.language))
                 <h1>X</h1>
                 <FaInstagram />
 
-
               </div>
 
-
-
             </div>
-
 
           </div>
         </div>

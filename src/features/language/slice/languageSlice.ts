@@ -3,8 +3,8 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { LanguageState } from "../types/LanguageSelectorsType"
 
 const initialState: LanguageState = {
-  languageCode: "en",
-  languageName: "English",
+  languageCode: "tr",
+  languageName: "Turkiye",
 };
 
 const languageSlice = createSlice({

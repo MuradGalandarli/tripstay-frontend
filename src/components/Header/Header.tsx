@@ -20,17 +20,17 @@ const Header = () => {
   const [language, setLanguage] = useState(false)
   const navigate = useNavigate();
   const [logout] = useLogoutMutation();
-
   const result = useGetTranslationQuery();
+  const [isHostMode, setIsHostMode] = useState(false);
   const translation = result?.data?.data;
+
   const dispatch = useAppDispatch();
 
   let token = useAppSelector(
     (state) => state.auth.accessToken
   );
- 
 
- const payload = token
+  const payload = token
     ? JSON.parse(atob(token.split(".")[1]))
     : null;
 
@@ -38,22 +38,34 @@ const Header = () => {
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
   ];
 
-
-
   const handleLogout = async () => {
     debugger
     await logout().unwrap();
-    
+
     dispatch(logoutAction());
-   
-    // navigate("/login")
+
   }
 
   const checkAuth = () => {
-
+    setIsHostMode(!isHostMode);
     debugger;
-    token != null ? navigate("/listing") : navigate("/login")
+    // token != null ? navigate("/listing") : navigate("/login")
 
+    if (token == null) {
+      if (isHostMode) {
+        navigate("/");
+      }
+      else {
+        navigate("/login");
+      }
+    } else {
+      if (isHostMode) {
+        navigate("/");
+      }
+      else {
+        navigate("/listing");
+      }
+    }
   }
 
   useEffect(() => {
@@ -68,6 +80,11 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+
+  if (result.isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -123,7 +140,7 @@ const Header = () => {
                 </div>
 
                 <div className="w-[220px] h-[100px] flex gap-2 content-center items-center ">
-                  <h1 onClick={() => (checkAuth())} className="text-[12px]">{ token == null ? translation?.["header.Mod"] : translation?.[ "heder.HomeMode"]}</h1>
+                  <h1 onClick={() => (checkAuth())} className="text-[12px]">{isHostMode && token == null ? translation?.["header.Mod"] : translation?.["heder.HomeMode"]}</h1>
                   <div>
                     <div className="flex gap-2">
                       <div onClick={() => navigate("/login")} className="w-[40px] h-[40px] rounded-[100%] bg-amber-200 flex items-center justify-center">
@@ -201,7 +218,4 @@ const Header = () => {
 
 export default Header
 
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
-}
 
