@@ -1,6 +1,9 @@
 import CreateListingWelcome from '../components/CreateListingWelcome'
 
 const CreatePropertyPage = () => {
+
+
+  
   return (
     <div>
       <CreateListingWelcome/>

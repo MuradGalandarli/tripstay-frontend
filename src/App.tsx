@@ -10,6 +10,7 @@ import { useAppDispatch } from './shared/hooks/useAppDispatch'
 import { useRefreshMutation } from "./features/auth/api/authApi"
 import CreatePropertyPage from './features/listing/page/CreatePropertyPage'
 import AmenitySelector from './features/listing/components/AmenitySelector'
+import PropertyTypeSelector from './features/listing/components/PropertyTypeSelector'
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
             <Route path='/amenity' element={<AmenitySelector />} />
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
+           <Route path='/propertyType' element={<PropertyTypeSelector />} />
         </Routes>
       </BrowserRouter>
     </>

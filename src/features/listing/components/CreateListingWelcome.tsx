@@ -2,19 +2,33 @@
 import { CiHome } from "react-icons/ci";
 import { AiFillBulb } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from "../../../shared/hooks/useAppSelector";
+
 
 const CreateListingWelcome = () => {
  
     const navigate = useNavigate();
+
+
+ let token = useAppSelector(
+    (state) => state.auth.accessToken
+  );
+
+  const payload = token
+    ? JSON.parse(atob(token.split(".")[1]))
+    : null;
+
+  const name = payload?.[
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+  ];
 
 const handleExit = ()=>{
 navigate("/")
 }
 
 const getAmenity = ()=>{
-    navigate("/amenity")
+    navigate("/propertyType")
 }
-
     return (
         <div>
 
@@ -28,7 +42,7 @@ const getAmenity = ()=>{
 
                 <div className='w-[40%] h-[300px] gap-9 flex flex-col items-center justify-center'>
 
-                    <h1 className='text-[40px] font-[400]'>Tekrar hoş geldiniz Murad</h1>
+                    <h1 className='text-[40px] font-[400]'>Tekrar hoş geldiniz {name}</h1>
 <div className='w-[100%] h-[30px] text-3xl '>
     <h1>Yeni bir ilan oluşturmaya başlayın</h1>
 </div>
