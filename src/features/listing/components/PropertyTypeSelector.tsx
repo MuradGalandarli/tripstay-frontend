@@ -9,8 +9,8 @@ import { VscHome } from "react-icons/vsc";
 import { MdVilla } from "react-icons/md";
 import { MdCabin } from "react-icons/md";
 import { useGetPropertyTypeQuery } from "../api/propertyTypeApi";
-
-
+import { useGetTranslationQuery } from "../../translation/Api/translationApi";
+import { useNavigate } from "react-router-dom";
 
 const iconMap = {
     house: IoHome,
@@ -27,7 +27,13 @@ const iconMap = {
 const PropertyTypeSelector = () => {
 
     const { data } = useGetPropertyTypeQuery();
-    console.log(data);
+    const translations = useGetTranslationQuery();
+    const navigate = useNavigate();
+    const AddStoreAndNextPage = (id:number)=>{
+navigate("/propertySpace")
+console.log(id);
+
+    }
 
     return (
         <div>
@@ -40,23 +46,21 @@ const PropertyTypeSelector = () => {
 
                 <div className="w-[50%] h-auto">
                     <div className="w-[100%] h-auto">
-                        <p className="text-[39px]">Aşağıdakilerden hangisi yerinizi en iyi tanımlıyor?</p>
+                        <p className="text-[39px]">{translations?.data?.data?.["createWhichBestDescribesYourPlace"]}</p>
                     </div>
                     <div className="w-[100%] h-[50px]"></div>
                     <div className="w-[100%] h-auto flex flex-wrap gap-[38px]">
 
                         {
-                            data?.data?.map((item:string) => {
-const Icon = iconMap[item.icone]
+                            data?.data?.map((item: string) => {
+                                const Icon = iconMap[item.icone]
 
 
                                 return (
                                     <>
-                                      
-                                      
 
-                                        <div key={item.id} className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                                          {Icon && <Icon className="text-[30px] text-black" />}
+                                        <div onClick={()=>(AddStoreAndNextPage(item.id))} key={item.id} className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
+                                            {Icon && <Icon className="text-[30px] text-black" />}
                                             <h1 className="text-[25px]">{item.name}</h1>
                                         </div>
                                     </>)

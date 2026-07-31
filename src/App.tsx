@@ -11,6 +11,7 @@ import { useRefreshMutation } from "./features/auth/api/authApi"
 import CreatePropertyPage from './features/listing/page/CreatePropertyPage'
 import AmenitySelector from './features/listing/components/AmenitySelector'
 import PropertyTypeSelector from './features/listing/components/PropertyTypeSelector'
+import PropertySpaceTypeSelector from './features/listing/components/PropertySpaceTypeSelector'
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
            <Route path='/propertyType' element={<PropertyTypeSelector />} />
+           <Route path='/propertySpace' element={<PropertySpaceTypeSelector />} />
         </Routes>
       </BrowserRouter>
     </>
