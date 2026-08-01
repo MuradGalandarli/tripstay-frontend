@@ -22,7 +22,6 @@ function App() {
     const initializeAuth = async () => {
       try {
         const data = await refresh().unwrap();
-        debugger
 
         dispatch(
           setCredentials({

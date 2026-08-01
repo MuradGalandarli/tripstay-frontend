@@ -3,6 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query'
 import { baseApi } from "../shared/api/baseApi";
 import authReducer from "../features/auth/slice/authSlice";
 import languageReducer from "../features/language/slice/languageSlice"
+import propertyReducer from "../features/listing/slice/propertySlice"
 
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
   reducer: {
    auth: authReducer,
    language: languageReducer,
+   property: propertyReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   
@@ -21,3 +23,5 @@ setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+

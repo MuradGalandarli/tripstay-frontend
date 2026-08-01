@@ -48,7 +48,7 @@ const Header = () => {
 
   const checkAuth = () => {
     setIsHostMode(!isHostMode);
-    debugger;
+    
     // token != null ? navigate("/listing") : navigate("/login")
 
     if (token == null) {

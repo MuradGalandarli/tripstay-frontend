@@ -26,7 +26,7 @@ export const baseQueryWithReauth: BaseQueryFn<
       api,
       extraOptions,
     );
-debugger;
+
 
     if (refreshResult.data) {
         const accessToken = refreshResult.data as string;
