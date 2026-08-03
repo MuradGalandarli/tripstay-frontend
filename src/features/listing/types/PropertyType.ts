@@ -4,3 +4,9 @@ export interface PropertyType{
 icone:string,
 name:string
 }
+
+export interface AmenityType{
+  id:number,
+  name:string,
+  icone:string
+}

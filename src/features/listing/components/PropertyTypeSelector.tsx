@@ -77,49 +77,7 @@ const PropertyTypeSelector = () => {
                             })
                         }
 
-
-
-
-
-
-                        {/* 
-                        <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <FaBuilding className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Daire</h1>
-                        </div>
-                        <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <FaWarehouse className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Ambar</h1>
-                        </div>
-
-                        <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <FaSailboat className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Tekne</h1>
-                        </div>
-
-
-                        <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <VscHome className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Klube</h1>
-                        </div>
-
-                         <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <GiCaveEntrance className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Magara</h1>
-                        </div>
-                        <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <MdVilla className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Villa</h1>
-                        </div>
-                         <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <MdVilla className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Villa</h1>
-                        </div>
-
-                          <div className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                            <MdCabin className="text-[30px] text-black" />
-                            <h1 className="text-[25px]">Villa</h1>
-                        </div> */}
+                      
                     </div>
                 </div>
             </div>

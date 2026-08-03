@@ -6,15 +6,18 @@ import { GrHost } from "react-icons/gr";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
 import { useAppDispatch } from "../../../shared/hooks/useAppDispatch";
 import { setSpaceType } from "../../listing/slice/propertySlice"
+import { useNavigate } from "react-router-dom";
 
 const PropertySpaceTypeSelector = () => {
 
+  const navigator = useNavigate();
   const translateData = useGetTranslationQuery();
   const dispatch = useAppDispatch();
   
 
   const handleSpaceType = (id:number)=>{
     dispatch(setSpaceType(id))
+    navigator("/amenitySelector")
   }
 
   return (

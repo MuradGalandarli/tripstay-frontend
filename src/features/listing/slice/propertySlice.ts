@@ -26,6 +26,8 @@ interface CreatePropertyState {
   isActive: boolean;
 
   images: File[];
+
+  amenityIds: number[];
 }
 
 interface Location {
@@ -70,6 +72,8 @@ const initialState: CreatePropertyState = {
   isActive: true,
 
   images: [],
+
+  amenityIds: [],
 };
 
 const propertySlice = createSlice({
@@ -98,14 +102,15 @@ const propertySlice = createSlice({
     setPrice: (state, action: PayloadAction<number>) => {
       state.pricePerNight = action.payload;
     },
-     setImages: (
-      state,
-      action: PayloadAction<File[]>
-    ) => {
+    setImages: (state, action: PayloadAction<File[]>) => {
       state.images = action.payload;
     },
 
     resetProperty: () => initialState,
+
+    setAmenities: (state, action: PayloadAction<number[]>) => {
+      state.amenityIds = action.payload;
+    },
   },
 });
 
@@ -117,6 +122,7 @@ export const {
   setPrice,
   setImages,
   resetProperty,
+  setAmenities
 } = propertySlice.actions;
 
 export default propertySlice.reducer;

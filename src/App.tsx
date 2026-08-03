@@ -12,6 +12,7 @@ import CreatePropertyPage from './features/listing/page/CreatePropertyPage'
 import AmenitySelector from './features/listing/components/AmenitySelector'
 import PropertyTypeSelector from './features/listing/components/PropertyTypeSelector'
 import PropertySpaceTypeSelector from './features/listing/components/PropertySpaceTypeSelector'
+import PropertyImageUpload from './features/listing/components/PropertyImageUpload'
 
 function App() {
 
@@ -38,8 +39,6 @@ function App() {
   }, []);
 
 
-
-
   return (
     <>
       <BrowserRouter>
@@ -53,6 +52,8 @@ function App() {
           <Route path='/listing' element={<CreatePropertyPage />} />
            <Route path='/propertyType' element={<PropertyTypeSelector />} />
            <Route path='/propertySpace' element={<PropertySpaceTypeSelector />} />
+           <Route path='/amenitySelector' element={<AmenitySelector/>}/>
+             <Route path='/propertyImageUpload' element={<PropertyImageUpload/>}/>
         </Routes>
       </BrowserRouter>
     </>
