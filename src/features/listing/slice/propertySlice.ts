@@ -121,8 +121,8 @@ export const {
   setDetails,
   setPrice,
   setImages,
-  resetProperty,
-  setAmenities
+  setAmenities,
+  resetProperty
 } = propertySlice.actions;
 
 export default propertySlice.reducer;
