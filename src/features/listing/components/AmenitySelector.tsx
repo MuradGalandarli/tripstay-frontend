@@ -47,8 +47,7 @@ const AmenitySelector = () => {
   const nextPage = () => {
     dispatch(setAmenities(selectedAmenities));
 
-    console.log(selectedAmenities);
-     navigate("/propertyImageUpload");
+     navigate("/propertyTitle");
   };
 
   return (

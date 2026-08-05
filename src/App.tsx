@@ -13,6 +13,7 @@ import AmenitySelector from './features/listing/components/AmenitySelector'
 import PropertyTypeSelector from './features/listing/components/PropertyTypeSelector'
 import PropertySpaceTypeSelector from './features/listing/components/PropertySpaceTypeSelector'
 import PropertyImageUpload from './features/listing/components/PropertyImageUpload'
+import PropertyTitle from './features/listing/components/PropertyTitle'
 
 function App() {
 
@@ -46,14 +47,14 @@ function App() {
           <Route path='' element={<MainLayout />}>
             <Route path='/' element={<Card />} />
             <Route path='/login' element={<LoginPage />} />
-            <Route path='/register' element={<RegisterPage />} />
-            <Route path='/amenity' element={<AmenitySelector />} />
+            <Route path='/register' element={<RegisterPage />} /> 
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
-           <Route path='/propertyType' element={<PropertyTypeSelector />} />
-           <Route path='/propertySpace' element={<PropertySpaceTypeSelector />} />
-           <Route path='/amenitySelector' element={<AmenitySelector/>}/>
-             <Route path='/propertyImageUpload' element={<PropertyImageUpload/>}/>
+          <Route path='/propertyType' element={<PropertyTypeSelector />} />
+          <Route path='/propertySpace' element={<PropertySpaceTypeSelector />} />
+          <Route path='/amenitySelector' element={<AmenitySelector />} />
+          <Route path='/propertyImageUpload' element={<PropertyImageUpload />} />
+          <Route path='/propertyTitle' element={<PropertyTitle />} />
         </Routes>
       </BrowserRouter>
     </>

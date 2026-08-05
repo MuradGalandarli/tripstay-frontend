@@ -38,7 +38,6 @@ interface Location {
 }
 
 interface Details {
-  title: string;
   description: string;
   maxGuests: number;
   bedroomCount: number;
@@ -105,7 +104,9 @@ const propertySlice = createSlice({
     setImages: (state, action: PayloadAction<File[]>) => {
       state.images = action.payload;
     },
-
+    setTitle:(state,action:PayloadAction<string>)=>{
+      state.title = action.payload
+    },
     resetProperty: () => initialState,
 
     setAmenities: (state, action: PayloadAction<number[]>) => {
@@ -122,6 +123,7 @@ export const {
   setPrice,
   setImages,
   setAmenities,
+  setTitle,
   resetProperty
 } = propertySlice.actions;
 
