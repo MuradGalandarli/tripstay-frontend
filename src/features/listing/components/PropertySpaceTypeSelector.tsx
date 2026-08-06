@@ -13,9 +13,9 @@ const PropertySpaceTypeSelector = () => {
   const navigator = useNavigate();
   const translateData = useGetTranslationQuery();
   const dispatch = useAppDispatch();
-  
 
-  const handleSpaceType = (id:number)=>{
+
+  const handleSpaceType = (id: number) => {
     dispatch(setSpaceType(id))
     navigator("/amenitySelector")
   }
@@ -36,7 +36,7 @@ const PropertySpaceTypeSelector = () => {
           <div className="w-[100%] h-[50px]"></div>
           <div className="w-[100%] h-auto flex flex-wrap gap-[38px]">
 
-            <div onClick={()=>{handleSpaceType(0)}} className="w-[100%] h-[100px] p-[15px] flex justify-between items-center border-1  rounded-2xl text-[#f2f1ed] hover:text-black">
+            <div onClick={() => { handleSpaceType(0) }} className="w-[100%] h-[100px] p-[15px] flex justify-between items-center border-1  rounded-2xl text-[#f2f1ed] hover:text-black">
 
               <div>
                 <h1 className="text-[25px]">{translateData?.data?.data?.["spaceEntirePlace"]}</h1>
@@ -45,7 +45,7 @@ const PropertySpaceTypeSelector = () => {
               <MdOutlineHome className="text-[30px] text-black" />
             </div>
 
-            <div onClick={()=>{handleSpaceType(1)}} className="w-[100%] h-[100px] p-[15px] flex justify-between items-center border-1  rounded-2xl text-[#f2f1ed] hover:text-black">
+            <div onClick={() => { handleSpaceType(1) }} className="w-[100%] h-[100px] p-[15px] flex justify-between items-center border-1  rounded-2xl text-[#f2f1ed] hover:text-black">
 
               <div>
                 <h1 className="text-[25px]">{translateData?.data?.data?.["spacePrivateRoom"]}</h1>
@@ -54,7 +54,7 @@ const PropertySpaceTypeSelector = () => {
               <MdOutlineMeetingRoom className="text-[30px] text-black" />
             </div>
 
-            <div onClick={()=>{handleSpaceType(2)}} className="w-[100%] h-[100px] p-[15px] flex justify-between items-center border-1  rounded-2xl text-[#f2f1ed] hover:text-black">
+            <div onClick={() => { handleSpaceType(2) }} className="w-[100%] h-[100px] p-[15px] flex justify-between items-center border-1  rounded-2xl text-[#f2f1ed] hover:text-black">
 
               <div>
                 <h1 className="text-[25px]">{translateData?.data?.data?.["spaceSharedRoom"]}</h1>

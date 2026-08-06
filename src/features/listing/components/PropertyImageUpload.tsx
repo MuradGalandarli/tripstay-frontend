@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { AiOutlineLineChart, AiOutlineThunderbolt } from "react-icons/ai";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
+import { useNavigate } from "react-router-dom";
 
 const PropertyImageUpload = () => {
   const [images, setImages] = useState<File[]>([]);
   const translation = useGetTranslationQuery();
+  const navigation = useNavigate();
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -31,6 +33,10 @@ const PropertyImageUpload = () => {
     );
   };
 
+  const nextPage = () => {
+navigation("/propertyLocationSelector");
+  }
+
 
   return (
 
@@ -47,7 +53,7 @@ const PropertyImageUpload = () => {
         </h1>
 
         <p className="text-gray-500 mb-8">
-         {translation?.data?.data?.["imageDescription"]}
+          {translation?.data?.data?.["imageDescription"]}
         </p>
 
 
@@ -69,7 +75,7 @@ const PropertyImageUpload = () => {
           </span>
 
           <span className="text-lg font-medium">
-           {translation?.data?.data?.["addImage"]}
+            {translation?.data?.data?.["addImage"]}
           </span>
 
           <span className="text-sm text-gray-500 mt-2">
@@ -180,7 +186,7 @@ const PropertyImageUpload = () => {
                 }
 
               </div>
-
+              <button onClick={() => {nextPage() }}>Next</button>
             </div>
 
           )

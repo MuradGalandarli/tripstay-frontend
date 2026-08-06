@@ -10,3 +10,13 @@ export interface AmenityType{
   name:string,
   icone:string
 }
+
+export interface CityType{
+  id:number,
+  name:string
+}
+
+export interface CountryType{
+  id:number,
+  name:string
+}

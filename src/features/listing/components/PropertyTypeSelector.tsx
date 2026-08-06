@@ -76,7 +76,6 @@ const PropertyTypeSelector = () => {
                                     </>)
                             })
                         }
-
                       
                     </div>
                 </div>

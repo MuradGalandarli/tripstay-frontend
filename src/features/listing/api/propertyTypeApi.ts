@@ -1,5 +1,10 @@
 import { baseApi } from "../../../shared/api/baseApi";
-import type { PropertyType, AmenityType } from "../types/PropertyType";
+import type {
+  PropertyType,
+  AmenityType,
+  CityType,
+  CountryType,
+} from "../types/PropertyType";
 
 export const propertyTypeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,7 +16,7 @@ export const propertyTypeApi = baseApi.injectEndpoints({
       }),
       keepUnusedDataFor: 86400,
     }),
-    
+
     getAmenity: builder.query<AmenityType[], void>({
       query: () => ({
         url: "/Amenity/get-all-amenity",
@@ -21,8 +26,28 @@ export const propertyTypeApi = baseApi.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
 
+    getCity: builder.query<CityType[], void>({
+      query: () => ({
+        url: "City/get-all-city",
+        method: "GET",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 86400,
+    }),
+
+getCountry:builder.query<CountryType,void>({
+  query:()=>({
+    url:"Country/get-all-country",
+    method:"GET",
+    credentials:"include"
+  }),
+  keepUnusedDataFor:86400
+})
+
+
+
 
   }),
 });
 
-export const { useGetPropertyTypeQuery, useGetAmenityQuery } = propertyTypeApi;
+export const { useGetPropertyTypeQuery, useGetAmenityQuery,useGetCityQuery,useGetCountryQuery} = propertyTypeApi;
