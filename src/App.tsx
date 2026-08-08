@@ -16,6 +16,7 @@ import PropertyImageUpload from './features/listing/components/PropertyImageUplo
 import PropertyTitle from './features/listing/components/PropertyTitle'
 import PropertyLocationSelector from './features/listing/components/PropertyLocationSelector'
 import PropertyDetailsSelector from './features/listing/components/PropertyDetailsSelector'
+import PropertyPriceSelector from './features/listing/components/PropertyPriceSelector'
 
 function App() {
 
@@ -49,7 +50,7 @@ function App() {
           <Route path='' element={<MainLayout />}>
             <Route path='/' element={<Card />} />
             <Route path='/login' element={<LoginPage />} />
-            <Route path='/register' element={<RegisterPage />} /> 
+            <Route path='/register' element={<RegisterPage />} />
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
           <Route path='/propertyType' element={<PropertyTypeSelector />} />
@@ -58,7 +59,8 @@ function App() {
           <Route path='/propertyImageUpload' element={<PropertyImageUpload />} />
           <Route path='/propertyTitle' element={<PropertyTitle />} />
           <Route path='/propertyLocationSelector' element={<PropertyLocationSelector />} />
-           <Route path='/propertyDetailsSelector' element={<PropertyDetailsSelector />} />
+          <Route path='/propertyDetailsSelector' element={<PropertyDetailsSelector />} />
+           <Route path='/propertyPriceSelector' element={<PropertyPriceSelector />} />
         </Routes>
       </BrowserRouter>
     </>
