@@ -63,7 +63,7 @@ const Header = () => {
         navigate("/");
       }
       else {
-        navigate("/listing");
+        navigate("/createListingWelcome");
       }
     }
   }

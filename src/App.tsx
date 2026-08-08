@@ -17,6 +17,9 @@ import PropertyTitle from './features/listing/components/PropertyTitle'
 import PropertyLocationSelector from './features/listing/components/PropertyLocationSelector'
 import PropertyDetailsSelector from './features/listing/components/PropertyDetailsSelector'
 import PropertyPriceSelector from './features/listing/components/PropertyPriceSelector'
+import CreateListingWelcome from './features/listing/components/CreateListingWelcome'
+import PropertyCreatedSuccess from './features/listing/components/PropertyCreatedSuccess'
+import PropertyCreatedFailed from './features/listing/components/PropertyCreatedFailed'
 
 function App() {
 
@@ -60,7 +63,10 @@ function App() {
           <Route path='/propertyTitle' element={<PropertyTitle />} />
           <Route path='/propertyLocationSelector' element={<PropertyLocationSelector />} />
           <Route path='/propertyDetailsSelector' element={<PropertyDetailsSelector />} />
-           <Route path='/propertyPriceSelector' element={<PropertyPriceSelector />} />
+          <Route path='/propertyPriceSelector' element={<PropertyPriceSelector />} />
+          <Route path='/createListingWelcome' element={<CreateListingWelcome />} />
+          <Route path='/propertyCreatedSuccess' element={<PropertyCreatedSuccess />} />
+           <Route path='/propertyCreatedFailed' element={<PropertyCreatedFailed />} />
         </Routes>
       </BrowserRouter>
     </>

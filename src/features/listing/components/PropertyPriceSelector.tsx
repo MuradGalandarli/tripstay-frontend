@@ -2,12 +2,13 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { setPrice } from "../slice/propertySlice";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
+import { useNavigate } from "react-router-dom";
 
 export default function PropertyPriceSelector() {
 
     const dispatch = useDispatch();
     const translation = useGetTranslationQuery();
-
+    const navigation = useNavigate();
     const [price, setPriceState] = useState(85);
 
 
@@ -26,6 +27,7 @@ export default function PropertyPriceSelector() {
         dispatch(
             setPrice(price)
         );
+         navigation("/listing")
 
     };
 
@@ -40,12 +42,12 @@ export default function PropertyPriceSelector() {
 
 
                     <h1 className="mt-6 text-center text-4xl font-bold">
-                       {translation?.data?.data?.["priceTitle"]}
+                        {translation?.data?.data?.["priceTitle"]}
                     </h1>
 
 
                     <p className="mt-3 text-center text-gray-500">
-                         {translation?.data?.data?.["priceDescription"]}
+                        {translation?.data?.data?.["priceDescription"]}
                     </p>
 
 
@@ -161,7 +163,7 @@ export default function PropertyPriceSelector() {
           hover:bg-gray-800
         "
                     >
-                       {translation?.data?.data?.["priceSaveButton"]}
+                        {translation?.data?.data?.["priceSaveButton"]}
                     </button>
 
 

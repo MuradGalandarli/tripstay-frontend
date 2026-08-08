@@ -42,7 +42,18 @@ getCountry:builder.query<CountryType,void>({
     credentials:"include"
   }),
   keepUnusedDataFor:86400
+}),
+
+createProperty : builder.mutation<any,FormData>({
+  query:(formData) =>({
+    url:"Property/create-property",
+    method:"POST",
+    body:formData
+
+  })
 })
+
+
 
 
 
@@ -50,4 +61,9 @@ getCountry:builder.query<CountryType,void>({
   }),
 });
 
-export const { useGetPropertyTypeQuery, useGetAmenityQuery,useGetCityQuery,useGetCountryQuery} = propertyTypeApi;
+export const { useGetPropertyTypeQuery,
+   useGetAmenityQuery,
+   useGetCityQuery,
+   useGetCountryQuery,
+  useCreatePropertyMutation
+  } = propertyTypeApi;

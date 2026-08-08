@@ -2,11 +2,14 @@ import { useState } from "react";
 import { AiOutlineLineChart, AiOutlineThunderbolt } from "react-icons/ai";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../../shared/hooks/useAppDispatch";
+import { setImages } from "../slice/propertySlice";
 
 const PropertyImageUpload = () => {
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImage] = useState<File[]>([]);
   const translation = useGetTranslationQuery();
   const navigation = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -20,7 +23,7 @@ const PropertyImageUpload = () => {
       return;
     }
 
-    setImages((prev) => [
+    setImage((prev) => [
       ...prev,
       ...files,
     ]);
@@ -28,12 +31,13 @@ const PropertyImageUpload = () => {
 
 
   const removeImage = (index: number) => {
-    setImages((prev) =>
+    setImage((prev) =>
       prev.filter((_, i) => i !== index)
     );
   };
 
   const nextPage = () => {
+    dispatch(setImages(images))
     navigation("/propertyLocationSelector");
   }
 
