@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useCreatePropertyMutation } from "../api/propertyTypeApi";
 import { useAppSelector } from "../../../shared/hooks/useAppSelector";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
+import { useAppDispatch } from "../../../shared/hooks/useAppDispatch";
+import { resetProperty } from "../slice/propertySlice";
 
 export default function CreatePropertyPage() {
 
@@ -12,8 +14,10 @@ export default function CreatePropertyPage() {
     (state) => state.property
   );
 
-  const [createProperty,{isError,isSuccess}] =
+  const [createProperty, {isError,isSuccess}] =
     useCreatePropertyMutation();
+
+  const dispatch = useAppDispatch();
 
  useEffect(() => {
   if (isSuccess) {
@@ -141,7 +145,7 @@ export default function CreatePropertyPage() {
       try {
 
         await createProperty(formData).unwrap();
-
+        dispatch(resetProperty()) 
 
       } catch (error) {
 
