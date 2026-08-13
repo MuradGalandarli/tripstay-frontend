@@ -1,21 +1,22 @@
 
 import { FaArrowRightLong } from "react-icons/fa6";
 import { IoHeartOutline } from "react-icons/io5";
-
 import { useGetAllCardQuery } from "../api/cardApi";
 import { useGetPropertiesByCitiesQuery } from "../api/cardApi";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
+import { useNavigate } from "react-router-dom";
 
 const Card = () => {
 
     const { data: getAllProperty } = useGetAllCardQuery();
 
     const translation = useGetTranslationQuery();
+    const navigation = useNavigate();
 
     const { data, isLoading, error } =
         useGetPropertiesByCitiesQuery([121,7, 5]);
 
-    console.log("City properties:", data);
+
 
     return (
         <>
@@ -38,6 +39,7 @@ const Card = () => {
                         <div
                             key={item.id}
                             className="h-auto w-[200px] flex-shrink-0 flex flex-col gap-2 relative"
+                            onClick={() => navigation(`/detailProperty/${item.id}`)}
                         >
                             <img
                                 className="h-[200px] w-[200px] rounded-3xl"
@@ -70,6 +72,7 @@ const Card = () => {
                 <div
                     key={city.cityId}
                     className="w-auto h-auto flex flex-col gap-4 justify-center"
+                         
                 >
 
                     <div className="h-[50px] flex items-center gap-2">
@@ -92,6 +95,7 @@ const Card = () => {
                             <div
                                 key={item.id}
                                 className="h-auto w-[200px] flex-shrink-0 flex flex-col gap-2 relative"
+                             onClick={() => navigation(`/detailProperty/${item.id}`)}
                             >
 
                                 <img

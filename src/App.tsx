@@ -20,6 +20,7 @@ import PropertyPriceSelector from './features/listing/components/PropertyPriceSe
 import CreateListingWelcome from './features/listing/components/CreateListingWelcome'
 import PropertyCreatedSuccess from './features/listing/components/PropertyCreatedSuccess'
 import PropertyCreatedFailed from './features/listing/components/PropertyCreatedFailed'
+import PropertyDetailPage from './features/propertyDetails/page/PropertyDetailPage'
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
             <Route path='/' element={<Card />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
+             <Route path="/detailProperty/:propertyId" element={<PropertyDetailPage />} />
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
           <Route path='/propertyType' element={<PropertyTypeSelector />} />
