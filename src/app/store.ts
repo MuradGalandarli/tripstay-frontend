@@ -4,7 +4,7 @@ import { baseApi } from "../shared/api/baseApi";
 import authReducer from "../features/auth/slice/authSlice";
 import languageReducer from "../features/language/slice/languageSlice"
 import propertyReducer from "../features/listing/slice/propertySlice"
-
+import favoriteReducer from "../features/fovorite/slice/favoriteSlice"
 
 export const store = configureStore({
   
@@ -12,6 +12,7 @@ export const store = configureStore({
    auth: authReducer,
    language: languageReducer,
    property: propertyReducer,
+   favorite: favoriteReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   
@@ -23,5 +24,6 @@ setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
 
 

@@ -154,7 +154,7 @@ const Header = () => {
                           <div className="absolute top-[80px] right-[40px] w-[250px] h-[0px] rounded-2xl shadow-xl/30 bg-white">
                             <ul className="p-7 flex flex-col gap-3  bg-white">
 
-                              <li className="flex items-center gap-2" > <FaRegHeart /> {translation?.["Menu.Favorites"]}</li>
+                              <li className="flex items-center gap-2" onClick={()=>(navigate("/favorite"))}> <FaRegHeart /> {translation?.["Menu.Favorites"]}</li>
                               <li className="flex items-center gap-2" onClick={() => (setLanguage(true), setProfileMenu(!profileMenu))}><TbWorld /> {translation?.["Menu.Language"]}  </li>
                               <li onClick={() => (handleLogout())} className="flex items-center gap-2"><RiLogoutBoxLine /> {translation?.["Menu.CloseSession"]}</li>
 

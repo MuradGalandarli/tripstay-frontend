@@ -21,6 +21,7 @@ import CreateListingWelcome from './features/listing/components/CreateListingWel
 import PropertyCreatedSuccess from './features/listing/components/PropertyCreatedSuccess'
 import PropertyCreatedFailed from './features/listing/components/PropertyCreatedFailed'
 import PropertyDetailPage from './features/propertyDetails/page/PropertyDetailPage'
+import FavoritePage from './features/fovorite/page/FavoritePage'
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
              <Route path="/detailProperty/:propertyId" element={<PropertyDetailPage />} />
+              <Route path='/favorite' element={<FavoritePage />} />
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
           <Route path='/propertyType' element={<PropertyTypeSelector />} />

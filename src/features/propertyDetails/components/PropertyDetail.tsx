@@ -139,9 +139,6 @@ const PropertyDetail = () => {
 
         </div>
 
-
-        {/* Title */}
-
         <div className="mb-7">
 
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
@@ -161,8 +158,6 @@ const PropertyDetail = () => {
         </div>
 
 
-        {/* Gallery */}
-
         {images.length > 0 ? (
 
           <div className="relative">
@@ -180,8 +175,6 @@ const PropertyDetail = () => {
                 }
               `}
             >
-
-              {/* Main image */}
 
               <button
                 type="button"
@@ -217,8 +210,6 @@ const PropertyDetail = () => {
               </button>
 
 
-              {/* Other images */}
-
               {images.slice(1, 5).map((image, index) => (
 
                 <button
@@ -242,8 +233,6 @@ const PropertyDetail = () => {
 
             </div>
 
-
-            {/* Mobile Gallery */}
 
             <div className="mt-2 flex gap-2 overflow-x-auto lg:hidden">
 
@@ -285,16 +274,9 @@ const PropertyDetail = () => {
 
         )}
 
-
-        {/* Main Content */}
-
         <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_380px]">
 
-          {/* Left */}
-
           <div>
-
-            {/* Overview */}
 
             <section className="border-b pb-8">
 
@@ -351,9 +333,6 @@ const PropertyDetail = () => {
 
             </section>
 
-
-            {/* Description */}
-
             <section className="border-b py-9">
 
               <h2 className="text-2xl font-semibold text-gray-900">
@@ -365,9 +344,6 @@ const PropertyDetail = () => {
               </p>
 
             </section>
-
-
-            {/* Stay Information */}
 
             <section className="border-b py-9">
 
@@ -407,9 +383,6 @@ const PropertyDetail = () => {
 
             </section>
 
-
-            {/* Location */}
-
             <section className="py-9">
 
               <h2 className="text-2xl font-semibold text-gray-900">
@@ -446,9 +419,6 @@ const PropertyDetail = () => {
 
           </div>
 
-
-          {/* Booking */}
-
           <div>
 
             <div className="sticky top-8 rounded-3xl border border-gray-200 bg-white p-6 shadow-xl shadow-gray-200/40">
@@ -470,9 +440,6 @@ const PropertyDetail = () => {
                   "detailBeforeTaxesAndFees"
                 ]}
               </p>
-
-
-              {/* Booking info */}
 
               <div className="mt-6 overflow-hidden rounded-2xl border border-gray-300">
 
@@ -524,9 +491,6 @@ const PropertyDetail = () => {
 
               </div>
 
-
-              {/* Reserve */}
-
               <button
                 type="button"
                 disabled={!property.isActive}
@@ -543,8 +507,6 @@ const PropertyDetail = () => {
                 ]}
               </p>
 
-
-              {/* Price */}
 
               <div className="mt-6 space-y-4 border-t pt-6 text-sm">
 
@@ -598,16 +560,12 @@ const PropertyDetail = () => {
       </div>
 
 
-      {/* Fullscreen Gallery */}
-
       {selectedImage !== null && (
 
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-5"
           onClick={closeImage}
         >
-
-          {/* Close */}
 
           <button
             type="button"
@@ -616,9 +574,6 @@ const PropertyDetail = () => {
           >
             <X size={23} />
           </button>
-
-
-          {/* Previous */}
 
           {images.length > 1 && (
 
@@ -635,18 +590,12 @@ const PropertyDetail = () => {
 
           )}
 
-
-          {/* Image */}
-
           <img
             src={images[selectedImage]}
             alt={`${property.title} ${selectedImage + 1}`}
             onClick={(event) => event.stopPropagation()}
             className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl"
           />
-
-
-          {/* Next */}
 
           {images.length > 1 && (
 
@@ -663,15 +612,9 @@ const PropertyDetail = () => {
 
           )}
 
-
-          {/* Counter */}
-
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-5 py-2 text-sm font-medium text-white backdrop-blur">
             {selectedImage + 1} / {images.length}
           </div>
-
-
-          {/* Thumbnails */}
 
           <div className="absolute bottom-16 left-1/2 hidden -translate-x-1/2 gap-2 md:flex">
 
@@ -718,11 +661,6 @@ const PropertyDetail = () => {
   );
 };
 
-
-/* ========================================================= */
-/* INFO CARD                                                  */
-/* ========================================================= */
-
 const InfoCard = ({
   icon,
   label,
@@ -751,10 +689,6 @@ const InfoCard = ({
   );
 };
 
-
-/* ========================================================= */
-/* TIME CARD                                                  */
-/* ========================================================= */
 
 const TimeCard = ({
   icon,

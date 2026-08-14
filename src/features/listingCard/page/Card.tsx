@@ -5,22 +5,52 @@ import { useGetAllCardQuery } from "../api/cardApi";
 import { useGetPropertiesByCitiesQuery } from "../api/cardApi";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
 import { useNavigate } from "react-router-dom";
+import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../fovorite/api/favoriteApi";
+import { useState } from "react";
+import { useAppSelector } from "../../../shared/hooks/useAppSelector";
+import { useDispatch } from "react-redux";
+import { addFavoriteLocal, removeFavoriteLocal } from "../../fovorite/slice/favoriteSlice";
 
 const Card = () => {
+
 
     const { data: getAllProperty } = useGetAllCardQuery();
 
     const translation = useGetTranslationQuery();
     const navigation = useNavigate();
 
-    const { data, isLoading, error } =
-        useGetPropertiesByCitiesQuery([121,7, 5]);
+    const dispatch = useDispatch();
 
+    const favoriteIds = useAppSelector((state) => state.favorite.favoriteIds);
+
+    const [addFavorite] = useAddFavoriteMutation();
+    const [removeFavorite] = useDeleteFavoriteMutation();
+
+    const { data, isLoading, error } =
+        useGetPropertiesByCitiesQuery([121, 7, 5]);
+
+    const handleFavorite = async (id: number) => {
+        const isFavorite = favoriteIds.includes(id);
+
+        try {
+            if (isFavorite) {
+                await removeFavorite(id).unwrap();
+
+                dispatch(removeFavoriteLocal(id));
+            } else {
+                await addFavorite(id).unwrap();
+
+                dispatch(addFavoriteLocal(id));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     return (
         <>
-          
+
             <div className="w-auto h-auto flex flex-col gap-4 justify-center">
 
                 <div className="h-[50px] flex items-center gap-2">
@@ -39,15 +69,29 @@ const Card = () => {
                         <div
                             key={item.id}
                             className="h-auto w-[200px] flex-shrink-0 flex flex-col gap-2 relative"
-                            onClick={() => navigation(`/detailProperty/${item.id}`)}
+
                         >
                             <img
                                 className="h-[200px] w-[200px] rounded-3xl"
                                 src={item.imageUrl}
                                 alt={item.title}
+                                onClick={() => navigation(`/detailProperty/${item.id}`)}
                             />
 
-                            <IoHeartOutline className="absolute left-[165px] text-2xl text-white top-3" />
+                            <IoHeartOutline
+                                className={`
+    absolute
+    left-[165px]
+    top-3
+    text-2xl
+    cursor-pointer
+    ${favoriteIds.includes(item.id)
+                                        ? "text-red-500"
+                                        : "text-white"
+                                    }
+  `}
+                                onClick={() => handleFavorite(item.id)}
+                            />
 
                             <div className="w-[150px] h-auto">
 
@@ -72,13 +116,13 @@ const Card = () => {
                 <div
                     key={city.cityId}
                     className="w-auto h-auto flex flex-col gap-4 justify-center"
-                         
+
                 >
 
                     <div className="h-[50px] flex items-center gap-2">
 
                         <h1 className="font-[500] text-[20px]">
-                            { city.cityName} {translation?.data?.data?.["propertyNearbyListings"]} 
+                            {city.cityName} {translation?.data?.data?.["propertyNearbyListings"]}
                         </h1>
 
                         <div className="w-[20px] h-[20px] bg-[#cacccf] rounded-[50%] flex items-center justify-center">
@@ -95,17 +139,29 @@ const Card = () => {
                             <div
                                 key={item.id}
                                 className="h-auto w-[200px] flex-shrink-0 flex flex-col gap-2 relative"
-                             onClick={() => navigation(`/detailProperty/${item.id}`)}
+                               
                             >
 
                                 <img
                                     className="h-[200px] w-[200px] rounded-3xl"
                                     src={item.imageUrl}
                                     alt={item.title}
+                                    onClick={() => navigation(`/detailProperty/${item.id}`)}
                                 />
 
                                 <IoHeartOutline
-                                    className="absolute left-[165px] text-2xl text-white top-3"
+                                    className={`
+    absolute
+    left-[165px]
+    top-3
+    text-2xl
+    cursor-pointer
+    ${favoriteIds.includes(item.id)
+                                            ? "text-red-500"
+                                            : "text-white"
+                                        }
+  `}
+                                    onClick={() => handleFavorite(item.id)}
                                 />
 
                                 <div className="w-[150px] h-auto">
