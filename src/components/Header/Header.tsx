@@ -12,6 +12,7 @@ import { useAppSelector } from "../../shared/hooks/useAppSelector";
 import { useLogoutMutation } from "../../features/auth/api/authApi";
 import { useAppDispatch } from "../../shared/hooks/useAppDispatch";
 import { logoutAction } from "../../features/auth/slice/authSlice"
+import { clearFavorites } from "../../features/fovorite/slice/favoriteSlice";
 
 const Header = () => {
 
@@ -41,8 +42,8 @@ const Header = () => {
   const handleLogout = async () => {
     debugger
     await logout().unwrap();
-
     dispatch(logoutAction());
+    dispatch(clearFavorites())
 
   }
 

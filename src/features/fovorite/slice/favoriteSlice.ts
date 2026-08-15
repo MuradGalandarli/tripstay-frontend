@@ -23,12 +23,28 @@ const favoriteSlice = createSlice({
         (id) => id !== action.payload
       );
     },
-  },
+
+    clearFavorites: (state) => {
+    state.favoriteIds = [];
+},
+
+setFavoriteLocal: (state, action: PayloadAction<number[]>) => {
+    action.payload.forEach((id) => {
+        if (!state.favoriteIds.includes(id)) {
+            state.favoriteIds.push(id);
+        }
+    });
+},
+
+
+  },  
 });
 
 export const {
   addFavoriteLocal,
   removeFavoriteLocal,
+  clearFavorites,
+  setFavoriteLocal
 } = favoriteSlice.actions;
 
 export default favoriteSlice.reducer;

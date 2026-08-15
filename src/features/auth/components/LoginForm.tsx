@@ -1,50 +1,100 @@
 import { useAppDispatch } from "../../../shared/hooks/useAppDispatch";
 import { setAccessToken } from "../slice/authSlice";
 import { useAppSelector } from "../../../shared/hooks/useAppSelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoginMutation } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
+import { setFavoriteLocal } from "../../fovorite/slice/favoriteSlice";
+import { useGetAllFavoriteQuery } from "../../fovorite/api/favoriteApi";
 
 const LoginForm = () => {
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
     const [login] = useLoginMutation();
     const navigate = useNavigate();
-
     const dispatch = useAppDispatch();
-    const auth = useAppSelector((state) => (state.auth))
 
+    const auth = useAppSelector(
+        (state) => state.auth.accessToken
+    );
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const {
+        data: favorites = [],
+        isSuccess: isFavoritesSuccess,
+    } = useGetAllFavoriteQuery(undefined, {
+        skip: !auth,
+    });
+
+   useEffect(() => {
+    if (auth && favorites?.data) {
+        const favoriteIds = favorites.data.map(
+            (item) => item.propertyId
+        );
+
+        console.log("Favorite IDs:", favoriteIds);
+
+        dispatch(setFavoriteLocal(favoriteIds));
+
+        navigate("/");
+    }
+}, [auth, favorites, dispatch, navigate]);
+
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ) => {
         e.preventDefault();
 
-        const result = await login({
+        try {
+            const result = await login({
+                username: email,
+                password: password,
+            }).unwrap();
 
-            "username": email,
-            "password": password
+            console.log("Login result:", result);
 
-        });
-        debugger;
-        if ('data' in result) {
-            dispatch(setAccessToken(result.data))
-            navigate('/');
+            dispatch(setAccessToken(result));
+        } catch (error) {
+            console.error("Login error:", error);
         }
-    }
-
+    };
 
     return (
         <div>
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-[18px]"
+            >
+                <input
+                    value={email}
+                    onChange={(e) =>
+                        setEmail(e.target.value)
+                    }
+                    className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50 rounded-[9px]"
+                    type="text"
+                    name="email"
+                    placeholder="Email"
+                />
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-[18px]">
-                <input value={email} onChange={(e) => { setEmail(e.target.value) }} className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50 rounded-[9px]" type="text" name="email" placeholder="Email" />
-                <input value={password} onChange={(e) => { setPassword(e.target.value) }} className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50  bg-amber-50 rounded-[9px]" type="text" name="password" placeholder="Password" />
+                <input
+                    value={password}
+                    onChange={(e) =>
+                        setPassword(e.target.value)
+                    }
+                    className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50 rounded-[9px]"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                />
 
-                <input type="submit" value="Sign Up" className="w-[380px] h-[40px]  bg-amber-50 rounded-[9px]" />
+                <input
+                    type="submit"
+                    value="Sign Up"
+                    className="w-[380px] h-[40px] bg-amber-50 rounded-[9px]"
+                />
             </form>
-
         </div>
-    )
-}
+    );
+};
 
-export default LoginForm
+export default LoginForm;

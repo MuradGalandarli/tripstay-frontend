@@ -6,13 +6,11 @@ import { useGetPropertiesByCitiesQuery } from "../api/cardApi";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
 import { useNavigate } from "react-router-dom";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../fovorite/api/favoriteApi";
-import { useState } from "react";
 import { useAppSelector } from "../../../shared/hooks/useAppSelector";
 import { useDispatch } from "react-redux";
 import { addFavoriteLocal, removeFavoriteLocal } from "../../fovorite/slice/favoriteSlice";
 
 const Card = () => {
-
 
     const { data: getAllProperty } = useGetAllCardQuery();
 
@@ -22,16 +20,19 @@ const Card = () => {
     const dispatch = useDispatch();
 
     const favoriteIds = useAppSelector((state) => state.favorite.favoriteIds);
+    const userLogin = useAppSelector((state) => state.auth.accessToken)
 
     const [addFavorite] = useAddFavoriteMutation();
     const [removeFavorite] = useDeleteFavoriteMutation();
-
-    const { data, isLoading, error } =
+  
+    const { data } =
         useGetPropertiesByCitiesQuery([121, 7, 5]);
 
     const handleFavorite = async (id: number) => {
-        const isFavorite = favoriteIds.includes(id);
+        if (!userLogin)
+            navigation("/login")
 
+        const isFavorite = favoriteIds.includes(id);
         try {
             if (isFavorite) {
                 await removeFavorite(id).unwrap();
@@ -139,7 +140,7 @@ const Card = () => {
                             <div
                                 key={item.id}
                                 className="h-auto w-[200px] flex-shrink-0 flex flex-col gap-2 relative"
-                               
+
                             >
 
                                 <img

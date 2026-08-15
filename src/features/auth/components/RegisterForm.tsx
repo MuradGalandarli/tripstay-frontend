@@ -20,15 +20,15 @@ const RegisterForm = () => {
     const dispatch = useAppDispatch();
     const auth = useAppSelector((state) => (state.auth))
 
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-debugger
+        
         const result = await register(newUser);
         
         if ('data' in result) {
             dispatch(setAccessToken(result.data))
             navigate('/');
+
         }
     }
 
@@ -49,3 +49,7 @@ debugger
 }
 
 export default RegisterForm
+function getAllFavorite() {
+    throw new Error("Function not implemented.");
+}
+
