@@ -83,6 +83,10 @@ const Header = () => {
   }, []);
 
 
+  const handleConversationList = ()=>{
+    navigate("/conversationList")
+  }
+
   if (result.isLoading) {
     return <div>Loading...</div>;
   }
@@ -156,6 +160,7 @@ const Header = () => {
                             <ul className="p-7 flex flex-col gap-3  bg-white">
 
                               <li className="flex items-center gap-2" onClick={()=>(navigate("/favorite"))}> <FaRegHeart /> {translation?.["Menu.Favorites"]}</li>
+                               <li className="flex items-center gap-2" onClick={()=>(navigate("/conversationPage"))}> <FaRegHeart />Message</li>
                               <li className="flex items-center gap-2" onClick={() => (setLanguage(true), setProfileMenu(!profileMenu))}><TbWorld /> {translation?.["Menu.Language"]}  </li>
                               <li onClick={() => (handleLogout())} className="flex items-center gap-2"><RiLogoutBoxLine /> {translation?.["Menu.CloseSession"]}</li>
 

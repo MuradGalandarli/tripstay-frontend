@@ -5,6 +5,7 @@ import authReducer from "../features/auth/slice/authSlice";
 import languageReducer from "../features/language/slice/languageSlice"
 import propertyReducer from "../features/listing/slice/propertySlice"
 import favoriteReducer from "../features/fovorite/slice/favoriteSlice"
+import chatReducer from "../features/chat/slice/chatSlice";
 
 export const store = configureStore({
   
@@ -13,6 +14,7 @@ export const store = configureStore({
    language: languageReducer,
    property: propertyReducer,
    favorite: favoriteReducer,
+   chat: chatReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   

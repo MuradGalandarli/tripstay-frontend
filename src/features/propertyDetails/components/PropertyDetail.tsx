@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   Heart,
@@ -27,6 +27,7 @@ const PropertyDetail = () => {
     useGetPropertyDetailQuery(propertyId);
 
   const translation = useGetTranslationQuery();
+  const navigation = useNavigate();
 
   const property = data?.data;
 
@@ -57,6 +58,9 @@ const PropertyDetail = () => {
       </div>
     );
   }
+const handleSendMessage = () => {
+  navigation(`/chatPage/${propertyId}`);
+};
 
   const images = property.imageUrls?.slice(0, 5) ?? [];
 
@@ -464,7 +468,7 @@ const PropertyDetail = () => {
                     <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500">
                       {translation?.data?.data?.[
                         "detailCheckOut"
-                      ]}
+                      ]}Dasa
                     </p>
 
                     <p className="mt-1 font-medium text-gray-900">
@@ -493,12 +497,14 @@ const PropertyDetail = () => {
 
               <button
                 type="button"
-                disabled={!property.isActive}
+              
                 className="mt-5 w-full rounded-2xl bg-black py-4 text-sm font-semibold text-white transition hover:bg-gray-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300"
-              >
-                {property.isActive
+               onClick={()=>{handleSendMessage()}} >
+                {/* {property.isActive
                   ? translation?.data?.data?.["detailReserve"]
-                  : translation?.data?.data?.["detailNotAvailable"]}
+                  : translation?.data?.data?.["detailNotAvailable"]} */}
+                  Messaj gonder
+
               </button>
 
               <p className="mt-4 text-center text-xs text-gray-500">

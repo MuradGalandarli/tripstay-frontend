@@ -22,6 +22,9 @@ import PropertyCreatedSuccess from './features/listing/components/PropertyCreate
 import PropertyCreatedFailed from './features/listing/components/PropertyCreatedFailed'
 import PropertyDetailPage from './features/propertyDetails/page/PropertyDetailPage'
 import FavoritePage from './features/fovorite/page/FavoritePage'
+import ChatPage from './features/chat/page/ChatPage'
+import ConversationPage from './features/chat/page/ConversationPage'
+import MessageWindow from './features/chat/components/MessageWindow'
 
 function App() {
 
@@ -56,8 +59,12 @@ function App() {
             <Route path='/' element={<Card />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
-             <Route path="/detailProperty/:propertyId" element={<PropertyDetailPage />} />
-              <Route path='/favorite' element={<FavoritePage />} />
+            <Route path="/detailProperty/:propertyId" element={<PropertyDetailPage />} />
+            <Route path='/favorite' element={<FavoritePage />} />
+            <Route path='/chatPage/:propertyId' element={<ChatPage />} />
+            <Route path='/conversationPage' element={<ConversationPage />} />
+            <Route path="/messagePage/:conversationId" element={<MessageWindow />}
+/>
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
           <Route path='/propertyType' element={<PropertyTypeSelector />} />
@@ -70,7 +77,7 @@ function App() {
           <Route path='/propertyPriceSelector' element={<PropertyPriceSelector />} />
           <Route path='/createListingWelcome' element={<CreateListingWelcome />} />
           <Route path='/propertyCreatedSuccess' element={<PropertyCreatedSuccess />} />
-           <Route path='/propertyCreatedFailed' element={<PropertyCreatedFailed />} />
+          <Route path='/propertyCreatedFailed' element={<PropertyCreatedFailed />} />
         </Routes>
       </BrowserRouter>
     </>
