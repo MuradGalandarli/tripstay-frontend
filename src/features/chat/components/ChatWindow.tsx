@@ -1,635 +1,689 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
-  HubConnection,
-  HubConnectionBuilder,
-  LogLevel,
+    HubConnection,
+    HubConnectionBuilder,
+    LogLevel,
 } from "@microsoft/signalr";
 
 import { useAppSelector } from "../../../shared/hooks/useAppSelector";
 
 import {
-  useCreateConversationMutation,
-  useGetMessagesQuery,
+    useCreateConversationMutation,
+    useGetMessagesQuery,
 } from "../api/chatApi";
+import { useNavigate } from "react-router-dom";
 
 interface ChatWindowProps {
-  propertyId: number;
+    propertyId: number;
 }
 
 interface ChatMessage {
-  id: number;
-  conversationId: number;
-  senderId: string;
-  content: string;
-  isRead: boolean;
-  readAt: string | null;
+    id: number;
+    conversationId: number;
+    senderId: string;
+    content: string;
+    isRead: boolean;
+    readAt: string | null;
 }
 
 export default function ChatWindow({
-  propertyId,
+    propertyId,
 }: ChatWindowProps) {
 
- 
-  const accessToken = useAppSelector(
-    (state) => state.auth.accessToken
-  );
+    const navigator = useNavigate();
 
-  const currentUserId = useAppSelector(
-    (state) => state.auth.user?.id
-  );
-
- 
-  const [
-    conversationId,
-    setConversationId,
-  ] = useState<number | null>(null);
-
-  const [
-    messageText,
-    setMessageText,
-  ] = useState("");
-
-  const [
-    connection,
-    setConnection,
-  ] = useState<HubConnection | null>(null);
-
-  const [
-    isConnected,
-    setIsConnected,
-  ] = useState(false);
-
-  const [
-    isSending,
-    setIsSending,
-  ] = useState(false);
-
-  
-  const [
-    realtimeMessages,
-    setRealtimeMessages,
-  ] = useState<ChatMessage[]>([]);
-
-  
-  const [
-    createConversation,
-    {
-      isLoading: isCreatingConversation,
-      error: conversationError,
-    },
-  ] = useCreateConversationMutation();
-
-  
-  useEffect(() => {
-    if (!propertyId) {
-      return;
-    }
-
-    const createConversationHandler = async () => {
-      try {
-        console.log(
-          "Creating conversation..."
-        );
-
-        const response =
-          await createConversation(
-            propertyId
-          ).unwrap();
-
-        console.log(
-          "Conversation created:",
-          response
-        );
-
-        setConversationId(
-          response.conversationId
-        );
-
-      } catch (error) {
-        console.error(
-          "Conversation creation error:",
-          error
-        );
-      }
-    };
-
-    createConversationHandler();
-
-  }, [
-    propertyId,
-    createConversation,
-  ]);
-
-  useEffect(() => {
-
-    if (!accessToken) {
-      console.log(
-        "SIGNALR: access token yoxdur"
-      );
-
-      return;
-    }
-
-    console.log(
-      "SIGNALR: connection yaradılır"
+    const accessToken = useAppSelector(
+        (state) => state.auth.accessToken
     );
 
-    const newConnection =
-      new HubConnectionBuilder()
-        .withUrl(
-          "https://localhost:7016/hubs/chat",
-          {
-            accessTokenFactory: () =>
-              accessToken,
-          }
-        )
-        .withAutomaticReconnect()
-        .configureLogging(
-          LogLevel.Information
-        )
-        .build();
-
-   
-    const receiveMessage = (
-      message: ChatMessage
-    ) => {
-
-      console.log(
-        "================================"
-      );
-
-      console.log(
-        "MESSAGE RECEIVED FROM SERVER"
-      );
-
-      console.log(
-        "MESSAGE:",
-        message
-      );
-
-      console.log(
-        "================================"
-      );
-
-   
-      if (
-        message.conversationId !==
-        conversationId
-      ) {
-        console.log(
-          "Message başqa conversation-a aiddir:",
-          message.conversationId
-        );
-
-        return;
-      }
-
-  
-      setRealtimeMessages(
-        (previousMessages) => {
-
-          // Eyni mesaj iki dəfə gəlməsin
-          const alreadyExists =
-            previousMessages.some(
-              (item) =>
-                item.id === message.id
-            );
-
-          if (alreadyExists) {
-            return previousMessages;
-          }
-
-          return [
-            ...previousMessages,
-            message,
-          ];
-        }
-      );
-    };
-
-    newConnection.on(
-      "ReceiveMessage",
-      receiveMessage
+    const currentUserId = useAppSelector(
+        (state) => state.auth.user?.id
     );
 
- 
-    const startConnection =
-      async () => {
+    const [conversationId, setConversationId] =
+        useState<number | null>(null);
 
-        try {
+    const [messageText, setMessageText] =
+        useState("");
 
-          console.log(
-            "SIGNALR CONNECTION STARTING..."
-          );
+    const [connection, setConnection] =
+        useState<HubConnection | null>(null);
 
-          await newConnection.start();
+    const [isConnected, setIsConnected] =
+        useState(false);
 
-          console.log(
-            "SIGNALR CONNECTED"
-          );
+    const [isSending, setIsSending] =
+        useState(false);
 
-          setConnection(
-            newConnection
-          );
-
-          setIsConnected(true);
-
-        } catch (error) {
-
-          console.error(
-            "SIGNALR CONNECTION ERROR:",
-            error
-          );
-
-          setConnection(null);
-          setIsConnected(false);
-        }
-      };
-
-    startConnection();
-
- 
-    newConnection.onreconnecting(
-      (error) => {
-
-        console.log(
-          "SIGNALR RECONNECTING:",
-          error
-        );
-
-        setIsConnected(false);
-      }
-    );
-
-   
-    newConnection.onreconnected(
-      (connectionId) => {
-
-        console.log(
-          "SIGNALR RECONNECTED:",
-          connectionId
-        );
-
-        setConnection(
-          newConnection
-        );
-
-        setIsConnected(true);
-      }
-    );
-
-  
-    newConnection.onclose(
-      (error) => {
-
-        console.log(
-          "SIGNALR CONNECTION CLOSED:",
-          error
-        );
-
-        setConnection(null);
-        setIsConnected(false);
-      }
-    );
-
-  
-    return () => {
-
-      console.log(
-        "SIGNALR CLEANUP"
-      );
-
-      newConnection.off(
-        "ReceiveMessage",
-        receiveMessage
-      );
-
-      if (
-        newConnection.state !==
-        "Disconnected"
-      ) {
-        newConnection.stop();
-      }
-
-      setConnection(null);
-      setIsConnected(false);
-    };
-
-  }, [accessToken, conversationId]);
-
- 
-  const {
-    data: messages = [],
-    isLoading: isLoadingMessages,
-  } =
-    useGetMessagesQuery(
-      conversationId!,
-      {
-        skip:
-          conversationId === null,
-      }
-    );
-
- 
-  const allMessages: ChatMessage[] = [
-    ...messages,
-    ...realtimeMessages.filter(
-      (realtimeMessage) =>
-        !messages.some(
-          (message) =>
-            message.id ===
-            realtimeMessage.id
-        )
-    ),
-  ];
-
- 
-  const sendMessage = async () => {
-
-    if (!conversationId) {
-
-      console.log(
-        "Conversation ID yoxdur"
-      );
-
-      return;
-    }
-
-    if (!messageText.trim()) {
-      return;
-    }
-
-   
-    if (!connection) {
-
-      console.log(
-        "SignalR connection yoxdur"
-      );
-
-      return;
-    }
-
-    if (
-      connection.state !==
-      "Connected"
-    ) {
-
-      console.log(
-        "SignalR connected deyil:",
-        connection.state
-      );
-
-      return;
-    }
-
-    try {
-
-      setIsSending(true);
-
-      console.log(
-        "================================"
-      );
-
-      console.log(
-        "MESSAGE SENDING"
-      );
-
-      console.log(
-        "Conversation:",
-        conversationId
-      );
-
-      console.log(
-        "Content:",
-        messageText.trim()
-      );
-
-      console.log(
-        "================================"
-      );
-
-     
-      await connection.invoke(
-        "SendMessage",
-        conversationId,
-        messageText.trim()
-      );
-
-      console.log(
-        "MESSAGE SENT SUCCESSFULLY"
-      );
-
-      setMessageText("");
-
-    } catch (error) {
-
-      console.error(
-        "MESSAGE SEND ERROR:",
-        error
-      );
-
-    } finally {
-
-      setIsSending(false);
-    }
-  };
-
- 
-  const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-
-    if (
-      event.key === "Enter"
-    ) {
-
-      event.preventDefault();
-
-      sendMessage();
-    }
-  };
-
-
-  if (
-    isCreatingConversation
-  ) {
-
-    return (
-      <div className="p-6">
-        Conversation yaradılır...
-      </div>
-    );
-  }
-
- 
-  if (conversationError) {
-
-    return (
-      <div className="p-6 text-red-500">
-        Conversation yaratmaq mümkün olmadı.
-      </div>
-    );
-  }
-
- 
-  return (
-
-    <div className="flex h-[600px] w-full max-w-2xl flex-col rounded-xl border bg-white">
-
- 
-      <div className="flex items-center justify-between border-b p-4">
-
-        <div>
-
-          <h2 className="font-semibold">
-            Chat
-          </h2>
-
-          {conversationId && (
-
-            <p className="text-xs text-gray-400">
-              Conversation #{conversationId}
-            </p>
-
-          )}
-
-        </div>
-
-
-        <div className="text-xs">
-
-          {isConnected ? (
-
-            <span className="text-green-500">
-              ● Connected
-            </span>
-
-          ) : (
-
-            <span className="text-red-500">
-              ● Not connected
-            </span>
-
-          )}
-
-        </div>
-
-      </div>
+    const [realtimeMessages, setRealtimeMessages] =
+        useState<ChatMessage[]>([]);
 
     
-      <div className="flex-1 overflow-y-auto p-4">
+    const [
+        createConversation,
+        {
+            isLoading: isCreatingConversation,
+            error: conversationError,
+        },
+    ] = useCreateConversationMutation();
 
-        {isLoadingMessages ? (
+  
+    useEffect(() => {
 
-          <div className="text-center text-gray-400">
-            Mesajlar yüklənir...
-          </div>
+        if (!propertyId) {
+            return;
+        }
 
-        ) : allMessages.length === 0 ? (
+        const createConversationHandler =
+            async () => {
 
-          <div className="flex h-full items-center justify-center text-gray-400">
-            Hələ mesaj yoxdur
-          </div>
+                try {
 
-        ) : (
+                    console.log(
+                        "Creating conversation..."
+                    );
 
-          <div className="space-y-3">
+                    const response =
+                        await createConversation(
+                            propertyId
+                        ).unwrap();
 
-            {allMessages.map(
-              (message) => {
+                    console.log(
+                        "Conversation created:",
+                        response
+                    );
 
-                const isMine =
-                  message.senderId ===
-                  currentUserId;
+                    setConversationId(
+                        response.conversationId
+                    );
 
-                return (
+                } catch (error) {
 
-                  <div
-                    key={message.id}
-                    className={`flex ${
-                      isMine
-                        ? "justify-end"
-                        : "justify-start"
-                    }`}
-                  >
+                    console.error(
+                        "Conversation creation error:",
+                        error
+                    );
 
-                    <div
-                      className={`max-w-[70%] rounded-lg p-3 ${
-                        isMine
-                          ? "bg-black text-white"
-                          : "bg-gray-100 text-black"
-                      }`}
-                    >
+                }
+            };
 
-                      <p>
-                        {message.content}
-                      </p>
+        createConversationHandler();
 
-                      {message.isRead && (
+    }, [
+        propertyId,
+        createConversation,
+    ]);
 
-                        <span
-                          className={`text-xs ${
-                            isMine
-                              ? "text-gray-300"
-                              : "text-gray-400"
-                          }`}
-                        >
-                          Read
+   
+    const {
+        data: messages = [],
+        isLoading: isLoadingMessages,
+        isError: isMessagesError,
+    } = useGetMessagesQuery(
+        conversationId!,
+        {
+            skip:
+                conversationId === null ||
+                conversationId <= 0,
+
+        
+            refetchOnMountOrArgChange: true,
+        }
+    );
+
+    useEffect(() => {
+
+        if (!accessToken) {
+            navigator("/login")
+            console.log(
+                "SIGNALR: access token yoxdur"
+            );
+
+            return;
+        }
+
+        console.log(
+            "SIGNALR: connection yaradılır"
+        );
+
+        const newConnection =
+            new HubConnectionBuilder()
+                .withUrl(
+                    "https://localhost:7016/hubs/chat",
+                    {
+                        accessTokenFactory: () =>
+                            accessToken,
+                    }
+                )
+                .withAutomaticReconnect()
+                .configureLogging(
+                    LogLevel.Information
+                )
+                .build();
+
+       
+        const receiveMessage = (
+            message: ChatMessage
+        ) => {
+
+            console.log(
+                "================================"
+            );
+
+            console.log(
+                "CHAT WINDOW - MESSAGE RECEIVED"
+            );
+
+            console.log(
+                "MESSAGE:",
+                message
+            );
+
+            console.log(
+                "CURRENT CONVERSATION:",
+                conversationId
+            );
+
+            console.log(
+                "================================"
+            );
+
+            if (
+                message.conversationId !==
+                conversationId
+            ) {
+
+                console.log(
+                    "Message başqa conversation-a aiddir"
+                );
+
+                return;
+            }
+
+            setRealtimeMessages(
+                (previousMessages) => {
+
+                    const alreadyExists =
+                        previousMessages.some(
+                            (item) =>
+                                item.id === message.id
+                        );
+
+                    if (alreadyExists) {
+                        return previousMessages;
+                    }
+
+                    return [
+                        ...previousMessages,
+                        message,
+                    ];
+                }
+            );
+        };
+
+        newConnection.on(
+            "ReceiveMessage",
+            receiveMessage
+        );
+
+        const startConnection =
+            async () => {
+
+                try {
+
+                    console.log(
+                        "SIGNALR CONNECTION STARTING..."
+                    );
+
+                    await newConnection.start();
+
+                    console.log(
+                        "SIGNALR CONNECTED"
+                    );
+
+                    setConnection(
+                        newConnection
+                    );
+
+                    setIsConnected(true);
+
+                } catch (error) {
+
+                    console.error(
+                        "SIGNALR CONNECTION ERROR:",
+                        error
+                    );
+
+                    setConnection(null);
+                    setIsConnected(false);
+
+                }
+            };
+
+        startConnection();
+
+        newConnection.onreconnecting(
+            (error) => {
+
+                console.log(
+                    "SIGNALR RECONNECTING:",
+                    error
+                );
+
+                setIsConnected(false);
+
+            }
+        );
+
+    
+        newConnection.onreconnected(
+            (connectionId) => {
+
+                console.log(
+                    "SIGNALR RECONNECTED:",
+                    connectionId
+                );
+
+                setConnection(
+                    newConnection
+                );
+
+                setIsConnected(true);
+
+            }
+        );
+
+        newConnection.onclose(
+            (error) => {
+
+                console.log(
+                    "SIGNALR CONNECTION CLOSED:",
+                    error
+                );
+
+                setConnection(null);
+                setIsConnected(false);
+
+            }
+        );
+
+        return () => {
+
+            console.log(
+                "SIGNALR CLEANUP"
+            );
+
+            newConnection.off(
+                "ReceiveMessage",
+                receiveMessage
+            );
+
+            if (
+                newConnection.state !==
+                "Disconnected"
+            ) {
+
+                newConnection.stop();
+
+            }
+
+            setConnection(null);
+            setIsConnected(false);
+
+        };
+
+    }, [
+        accessToken,
+        conversationId,
+    ]);
+
+   
+    useEffect(() => {
+
+        setRealtimeMessages([]);
+
+    }, [conversationId]);
+
+    const allMessages =
+        useMemo(() => {
+
+            const historyMessages =
+                messages as ChatMessage[];
+
+            const result = [
+                ...historyMessages,
+            ];
+
+            realtimeMessages.forEach(
+                (realtimeMessage) => {
+
+                    const exists =
+                        result.some(
+                            (message) =>
+                                message.id ===
+                                realtimeMessage.id
+                        );
+
+                    if (!exists) {
+
+                        result.push(
+                            realtimeMessage
+                        );
+
+                    }
+
+                }
+            );
+
+            return result.sort(
+                (a, b) =>
+                    a.id - b.id
+            );
+
+        }, [
+            messages,
+            realtimeMessages,
+        ]);
+
+   
+    const sendMessage =
+        async () => {
+
+            if (!conversationId) {
+
+                console.log(
+                    "Conversation ID yoxdur"
+                );
+
+                return;
+            }
+
+            if (!messageText.trim()) {
+                return;
+            }
+
+            if (!connection) {
+
+                console.log(
+                    "SignalR connection yoxdur"
+                );
+
+                return;
+            }
+
+            if (
+                connection.state !==
+                "Connected"
+            ) {
+
+                console.log(
+                    "SignalR connected deyil:",
+                    connection.state
+                );
+
+                return;
+            }
+
+            try {
+
+                setIsSending(true);
+
+                console.log(
+                    "================================"
+                );
+
+                console.log(
+                    "CHAT WINDOW - MESSAGE SENDING"
+                );
+
+                console.log(
+                    "Conversation:",
+                    conversationId
+                );
+
+                console.log(
+                    "Content:",
+                    messageText.trim()
+                );
+
+                console.log(
+                    "================================"
+                );
+
+                await connection.invoke(
+                    "SendMessage",
+                    conversationId,
+                    messageText.trim()
+                );
+
+                console.log(
+                    "MESSAGE SENT SUCCESSFULLY"
+                );
+
+                setMessageText("");
+
+            } catch (error) {
+
+                console.error(
+                    "MESSAGE SEND ERROR:",
+                    error
+                );
+
+            } finally {
+
+                setIsSending(false);
+
+            }
+        };
+
+   
+    const handleKeyDown = (
+        event: React.KeyboardEvent<HTMLInputElement>
+    ) => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+    };
+
+    if (isCreatingConversation) {
+
+        return (
+            <div className="p-6">
+                Conversation yaradılır...
+            </div>
+        );
+    }
+
+    if (conversationError) {
+
+        return (
+            <div className="p-6 text-red-500">
+                Conversation yaratmaq mümkün olmadı.
+            </div>
+        );
+    }
+
+ 
+    return (
+
+        <div className="flex h-[600px] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border bg-white shadow-sm">
+
+
+            <div className="flex items-center justify-between border-b px-5 py-4">
+
+                <div>
+
+                    <h2 className="font-semibold text-gray-900">
+                        Chat
+                    </h2>
+
+                    {conversationId && (
+
+                        <p className="text-xs text-gray-400">
+                            Conversation #{conversationId}
+                        </p>
+
+                    )}
+
+                </div>
+
+                <div className="text-xs">
+
+                    {isConnected ? (
+
+                        <span className="text-green-500">
+                            ● Online
                         </span>
 
-                      )}
+                    ) : (
+
+                        <span className="text-red-500">
+                            ● Offline
+                        </span>
+
+                    )}
+
+                </div>
+
+            </div>
+
+            <div className="flex-1 overflow-y-auto bg-gray-50 p-5">
+
+                {isLoadingMessages ? (
+
+                    <div className="flex h-full items-center justify-center">
+
+                        <p className="text-gray-400">
+                            Mesajlar yüklənir...
+                        </p>
 
                     </div>
 
-                  </div>
+                ) : isMessagesError ? (
 
-                );
-              }
-            )}
+                    <div className="flex h-full items-center justify-center">
 
-          </div>
+                        <p className="text-red-500">
+                            Mesajları yükləmək mümkün olmadı.
+                        </p>
 
-        )}
+                    </div>
 
-      </div>
+                ) : allMessages.length === 0 ? (
 
-      <div className="flex gap-2 border-t p-4">
+                    <div className="flex h-full items-center justify-center">
 
-        <input
-          value={messageText}
-          onChange={(event) =>
-            setMessageText(
-              event.target.value
-            )
-          }
-          onKeyDown={
-            handleKeyDown
-          }
-          placeholder="Mesaj yaz..."
-          disabled={!isConnected}
-          className="flex-1 rounded-lg border px-4 py-2 outline-none focus:ring-2"
-        />
+                        <p className="text-gray-400">
+                            Hələ mesaj yoxdur.
+                        </p>
 
-        <button
-          type="button"
-          onClick={sendMessage}
-          disabled={
-            !isConnected ||
-            !messageText.trim() ||
-            isSending
-          }
-          className="rounded-lg bg-black px-5 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
-        >
+                    </div>
 
-          {isSending
-            ? "Göndərilir..."
-            : "Göndər"}
+                ) : (
 
-        </button>
+                    <div className="space-y-3">
 
-      </div>
+                        {allMessages.map(
+                            (message) => {
 
-    </div>
-  );
+                                const isMine =
+                                    message.senderId ===
+                                    currentUserId;
+
+                                return (
+
+                                    <div
+                                        key={message.id}
+                                        className={`flex ${isMine
+                                                ? "justify-end"
+                                                : "justify-start"
+                                            }`}
+                                    >
+
+                                        <div
+                                            className={`max-w-[70%] rounded-2xl px-4 py-2.5 ${isMine
+                                                    ? "rounded-br-md bg-black text-white"
+                                                    : "rounded-bl-md bg-white text-gray-900 shadow-sm"
+                                                }`}
+                                        >
+
+                                            <p className="break-words text-sm">
+                                                {message.content}
+                                            </p>
+
+                                            {message.isRead &&
+                                                isMine && (
+
+                                                    <p className="mt-1 text-right text-[10px] text-gray-300">
+                                                        Read
+                                                    </p>
+
+                                                )}
+
+                                        </div>
+
+                                    </div>
+
+                                );
+
+                            }
+                        )}
+
+                    </div>
+
+                )}
+
+            </div>
+
+            <div className="border-t bg-white p-4">
+
+                <div className="flex gap-2">
+
+                    <input
+                        value={messageText}
+                        onChange={(event) =>
+                            setMessageText(
+                                event.target.value
+                            )
+                        }
+                        onKeyDown={
+                            handleKeyDown
+                        }
+                        placeholder="Mesaj yaz..."
+                        disabled={!isConnected}
+                        className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none transition focus:border-black"
+                    />
+
+                    <button
+                        type="button"
+                        onClick={sendMessage}
+                        disabled={
+                            !isConnected ||
+                            !messageText.trim() ||
+                            isSending
+                        }
+                        className="rounded-xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+
+                        {isSending
+                            ? "Göndərilir..."
+                            : "Göndər"}
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    );
 }

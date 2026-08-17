@@ -1,17 +1,23 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import { useParams } from "react-router-dom";
+
 import {
   HubConnection,
   HubConnectionBuilder,
   LogLevel,
 } from "@microsoft/signalr";
 
-import { useParams } from "react-router-dom";
-
 import { useAppSelector } from "../../../shared/hooks/useAppSelector";
 
 import {
   useGetMessagesQuery,
 } from "../api/chatApi";
+
 
 interface Message {
   id: number;
@@ -22,8 +28,10 @@ interface Message {
   readAt?: string | null;
 }
 
+
 const MessageWindow = () => {
 
+  
   const { conversationId } = useParams<{
     conversationId: string;
   }>();
@@ -31,48 +39,157 @@ const MessageWindow = () => {
   const currentConversationId =
     Number(conversationId);
 
-  const accessToken = useAppSelector(
-    (state) => state.auth.accessToken
-  );
-
-  const currentUserId = useAppSelector(
-    (state) => state.auth.user?.id
-  );
-
- 
-  const [connection, setConnection] =
-    useState<HubConnection | null>(null);
-
-  const [messageText, setMessageText] =
-    useState("");
-
-  const [realtimeMessages, setRealtimeMessages] =
-    useState<Message[]>([]);
-
-  const [isSending, setIsSending] =
-    useState(false);
-
-  if (!currentConversationId) {
-
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-red-500">
-          Conversation tapılmadı.
-        </p>
-      </div>
+  const accessToken =
+    useAppSelector(
+      (state) =>
+        state.auth.accessToken
     );
 
-  }
+  const currentUserId =
+    useAppSelector(
+      (state) =>
+        state.auth.user?.id
+    );
+
+
+  const [
+    messageText,
+    setMessageText,
+  ] = useState("");
+
+
+  const [
+    connection,
+    setConnection,
+  ] = useState<HubConnection | null>(
+    null
+  );
+
+
+  const [
+    localMessages,
+    setLocalMessages,
+  ] = useState<Message[]>([]);
+
+
+  const messagesEndRef =
+    useRef<HTMLDivElement | null>(
+      null
+    );
+
 
   const {
     data: messages = [],
     isLoading,
-    isError,
-  } = useGetMessagesQuery(
-    currentConversationId
-  );
+    isFetching,
+    error,
+    refetch,
+  } =
+    useGetMessagesQuery(
+      currentConversationId,
+      {
+        skip:
+          !currentConversationId ||
+          currentConversationId <= 0,
 
- 
+        refetchOnMountOrArgChange: true,
+      }
+    );
+
+
+  useEffect(() => {
+
+    if (
+      !currentConversationId ||
+      currentConversationId <= 0
+    ) {
+      return;
+    }
+
+    setLocalMessages([]);
+
+    refetch();
+
+  }, [
+    currentConversationId,
+    refetch,
+  ]);
+
+
+  useEffect(() => {
+
+    if (!messages) {
+      return;
+    }
+
+    const history =
+      messages as Message[];
+
+    setLocalMessages(
+      (previousMessages) => {
+
+        const messageMap =
+          new Map<number, Message>();
+
+
+        history.forEach(
+          (message) => {
+
+            messageMap.set(
+              message.id,
+              message
+            );
+
+          }
+        );
+
+
+        previousMessages.forEach(
+          (message) => {
+
+            if (
+              message.conversationId ===
+              currentConversationId
+            ) {
+
+              messageMap.set(
+                message.id,
+                message
+              );
+
+            }
+
+          }
+        );
+
+
+        return Array.from(
+          messageMap.values()
+        ).sort(
+          (a, b) =>
+            a.id - b.id
+        );
+
+      }
+    );
+
+  }, [
+    messages,
+    currentConversationId,
+  ]);
+
+
+  useEffect(() => {
+
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+
+  }, [
+    localMessages,
+  ]);
+
+
   useEffect(() => {
 
     if (!accessToken) {
@@ -84,18 +201,19 @@ const MessageWindow = () => {
       return;
     }
 
-    if (!currentConversationId) {
+
+    if (
+      !currentConversationId ||
+      currentConversationId <= 0
+    ) {
+
+      console.log(
+        "SignalR: conversation ID yoxdur"
+      );
+
       return;
     }
 
-    console.log(
-      "SIGNALR CONNECTION YARADILIR"
-    );
-
-    console.log(
-      "Conversation ID:",
-      currentConversationId
-    );
 
     const newConnection =
       new HubConnectionBuilder()
@@ -112,135 +230,100 @@ const MessageWindow = () => {
         )
         .build();
 
-   
-    newConnection.on(
-      "ReceiveMessage",
+
+    const receiveMessage =
       (message: Message) => {
 
-        console.log(
-          "================================"
-        );
-
-        console.log(
-          "MESSAGE RECEIVED"
-        );
-
-        console.log(
-          "MESSAGE:",
-          message
-        );
-
-        console.log(
-          "CURRENT CONVERSATION:",
-          currentConversationId
-        );
-
-        console.log(
-          "================================"
-        );
-
-   
         if (
           message.conversationId !==
           currentConversationId
         ) {
 
-          console.log(
-            "Bu mesaj başqa conversation-a aiddir."
-          );
-
           return;
         }
 
-        setRealtimeMessages(
+
+        setLocalMessages(
           (previousMessages) => {
 
             const exists =
               previousMessages.some(
                 (item) =>
-                  item.id === message.id
+                  item.id ===
+                  message.id
               );
 
+
             if (exists) {
+
               return previousMessages;
+
             }
+
 
             return [
               ...previousMessages,
               message,
-            ];
+            ].sort(
+              (a, b) =>
+                a.id - b.id
+            );
 
           }
         );
 
-      }
+      };
+
+
+    newConnection.on(
+      "ReceiveMessage",
+      receiveMessage
     );
 
-    const startConnection = async () => {
 
-      try {
+    const startConnection =
+      async () => {
 
-        console.log(
-          "SIGNALR CONNECTION STARTING..."
-        );
+        try {
 
-        await newConnection.start();
+          await newConnection.start();
 
-        console.log(
-          "================================"
-        );
+          console.log(
+            "SIGNALR CONNECTED"
+          );
 
-        console.log(
-          "SIGNALR CONNECTED"
-        );
+          setConnection(
+            newConnection
+          );
 
-        console.log(
-          "Conversation:",
-          currentConversationId
-        );
+        } catch (error) {
 
-        console.log(
-          "================================"
-        );
+          console.error(
+            "SIGNALR CONNECTION ERROR:",
+            error
+          );
 
-        setConnection(
-          newConnection
-        );
+        }
 
-      } catch (error) {
+      };
 
-        console.error(
-          "SIGNALR CONNECTION ERROR:",
-          error
-        );
-
-      }
-
-    };
 
     startConnection();
 
+
     newConnection.onreconnecting(
-      (error) => {
+      () => {
 
-        console.log(
-          "SIGNALR RECONNECTING:",
-          error
+        setConnection(
+          null
         );
-
-        setConnection(null);
 
       }
     );
 
-   
-    newConnection.onreconnected(
-      (connectionId) => {
 
-        console.log(
-          "SIGNALR RECONNECTED:",
-          connectionId
-        );
+    newConnection.onreconnected(
+      () => {
 
         setConnection(
           newConnection
@@ -249,29 +332,41 @@ const MessageWindow = () => {
       }
     );
 
+
     newConnection.onclose(
-      (error) => {
+      () => {
 
-        console.log(
-          "SIGNALR CONNECTION CLOSED:",
-          error
+        setConnection(
+          null
         );
-
-        setConnection(null);
 
       }
     );
 
-  
+
     return () => {
 
-      console.log(
-        "SIGNALR CLEANUP"
+      newConnection.off(
+        "ReceiveMessage",
+        receiveMessage
       );
 
-      newConnection.stop();
 
-      setConnection(null);
+      if (
+        newConnection.state !==
+        "Disconnected"
+      ) {
+
+        newConnection
+          .stop()
+          .catch(() => {});
+
+      }
+
+
+      setConnection(
+        null
+      );
 
     };
 
@@ -280,294 +375,294 @@ const MessageWindow = () => {
     currentConversationId,
   ]);
 
-  
-  const sendMessage = async () => {
 
-    if (!messageText.trim()) {
-      return;
-    }
+  const sendMessage =
+    async () => {
 
-    if (!connection) {
+      if (
+        !currentConversationId
+      ) {
 
-      console.log(
-        "SignalR connection yoxdur"
-      );
+        return;
+      }
 
-      return;
-    }
 
-    if (
-      connection.state !== "Connected"
-    ) {
+      if (
+        !messageText.trim()
+      ) {
 
-      console.log(
-        "SignalR connected deyil:",
-        connection.state
-      );
+        return;
+      }
 
-      return;
-    }
 
-    try {
+      if (!connection) {
 
-      setIsSending(true);
+        console.log(
+          "SignalR connection yoxdur"
+        );
 
-      const content =
-        messageText.trim();
+        return;
+      }
 
-      console.log(
-        "================================"
-      );
 
-      console.log(
-        "SENDING MESSAGE"
-      );
+      if (
+        connection.state !==
+        "Connected"
+      ) {
 
-      console.log(
-        "Conversation ID:",
-        currentConversationId
-      );
+        console.log(
+          "SignalR connected deyil"
+        );
 
-      console.log(
-        "Content:",
-        content
-      );
+        return;
+      }
 
-      console.log(
-        "================================"
-      );
 
-     
+      try {
 
-      await connection.invoke(
-        "SendMessage",
-        currentConversationId,
-        content
-      );
+        await connection.invoke(
+          "SendMessage",
+          currentConversationId,
+          messageText.trim()
+        );
 
-      console.log(
-        "MESSAGE SENT SUCCESSFULLY"
-      );
 
-      setMessageText("");
+        setMessageText("");
 
-    } catch (error) {
+      } catch (error) {
 
-      console.error(
-        "MESSAGE SEND ERROR:",
-        error
-      );
+        console.error(
+          "MESSAGE SEND ERROR:",
+          error
+        );
 
-    } finally {
+      }
 
-      setIsSending(false);
+    };
 
-    }
 
-  };
+  const handleKeyDown =
+    (
+      event: React.KeyboardEvent<HTMLInputElement>
+    ) => {
 
-  const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+      if (
+        event.key === "Enter"
+      ) {
 
-    if (event.key === "Enter") {
+        event.preventDefault();
 
-      event.preventDefault();
+        sendMessage();
 
-      sendMessage();
+      }
 
-    }
+    };
 
-  };
 
-  const allMessages: Message[] = [
-    ...messages,
-    ...realtimeMessages.filter(
-      (realtimeMessage) =>
-        !messages.some(
-          (message) =>
-            message.id ===
-            realtimeMessage.id
-        )
-    ),
-  ];
+  if (
+    !currentConversationId ||
+    currentConversationId <= 0
+  ) {
 
-  
+    return (
+
+      <div className="flex min-h-screen items-center justify-center">
+
+        <p className="text-gray-400">
+          Conversation seçilməyib.
+        </p>
+
+      </div>
+
+    );
+
+  }
+
   return (
 
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+    <div className="min-h-screen w-full bg-gray-50">
 
-      <div className="flex h-[650px] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
+  
+      <div className="flex min-h-screen w-full items-center justify-center p-6">
 
-      
-        <div className="flex items-center justify-between border-b px-6 py-4">
+    
+        <div className="flex h-[600px] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border bg-white shadow-lg">
 
-          <div>
 
-            <h2 className="text-lg font-semibold">
-              Mesajlar
-            </h2>
+          <div className="flex items-center justify-between border-b px-5 py-4">
 
-            <p className="text-xs text-gray-400">
-              Conversation #{currentConversationId}
-            </p>
+            <div>
+
+              <h2 className="font-semibold text-gray-900">
+                Mesajlar
+              </h2>
+
+              <p className="text-xs text-gray-400">
+                Conversation #{currentConversationId}
+              </p>
+
+            </div>
+
+
+            <div>
+
+              {connection ? (
+
+                <span className="text-xs font-medium text-green-500">
+                  ● Online
+                </span>
+
+              ) : (
+
+                <span className="text-xs text-gray-400">
+                  ● Connecting...
+                </span>
+
+              )}
+
+            </div>
 
           </div>
 
-          <div>
 
-            {connection ? (
+          <div className="flex-1 overflow-y-auto bg-gray-50 p-5">
 
-              <span className="text-sm text-green-500">
-                ● Online
-              </span>
+            {(
+              isLoading ||
+              isFetching
+            ) ? (
+
+              <div className="flex h-full items-center justify-center">
+
+                <p className="text-sm text-gray-400">
+                  Mesajlar yüklənir...
+                </p>
+
+              </div>
+
+            ) : error ? (
+
+              <div className="flex h-full items-center justify-center">
+
+                <p className="text-sm text-red-500">
+                  Mesajları yükləmək mümkün olmadı.
+                </p>
+
+              </div>
+
+            ) : localMessages.length === 0 ? (
+
+              <div className="flex h-full items-center justify-center">
+
+                <p className="text-sm text-gray-400">
+                  Hələ mesaj yoxdur.
+                </p>
+
+              </div>
 
             ) : (
 
-              <span className="text-sm text-gray-400">
-                ● Connecting...
-              </span>
+              <div className="space-y-3">
 
-            )}
+                {localMessages.map(
+                  (message) => {
 
-          </div>
+                    const isMine =
+                      message.senderId ===
+                      currentUserId;
 
-        </div>
 
-      
-        <div className="flex-1 overflow-y-auto bg-gray-50 p-6">
-
-          {isLoading ? (
-
-            <div className="flex h-full items-center justify-center">
-
-              <p className="text-gray-400">
-                Mesajlar yüklənir...
-              </p>
-
-            </div>
-
-          ) : isError ? (
-
-            <div className="flex h-full items-center justify-center">
-
-              <p className="text-red-500">
-                Mesajları yükləmək mümkün olmadı.
-              </p>
-
-            </div>
-
-          ) : allMessages.length === 0 ? (
-
-            <div className="flex h-full items-center justify-center">
-
-              <p className="text-gray-400">
-                Hələ mesaj yoxdur.
-              </p>
-
-            </div>
-
-          ) : (
-
-            <div className="space-y-3">
-
-              {allMessages.map(
-                (message) => {
-
-                  const isMine =
-                    message.senderId ===
-                    currentUserId;
-
-                  return (
-
-                    <div
-                      key={message.id}
-                      className={`flex ${
-                        isMine
-                          ? "justify-end"
-                          : "justify-start"
-                      }`}
-                    >
+                    return (
 
                       <div
-                        className={`max-w-[70%] rounded-2xl px-4 py-3 ${
+                        key={message.id}
+                        className={`flex ${
                           isMine
-                            ? "bg-black text-white"
-                            : "bg-white text-gray-800 shadow-sm"
+                            ? "justify-end"
+                            : "justify-start"
                         }`}
                       >
 
-                        <p className="text-sm">
-                          {message.content}
-                        </p>
-
                         <div
-                          className={`mt-1 text-right text-[10px] ${
+                          className={`max-w-[70%] rounded-2xl px-4 py-2 ${
                             isMine
-                              ? "text-gray-300"
-                              : "text-gray-400"
+                              ? "bg-black text-white"
+                              : "bg-white text-gray-800 shadow-sm"
                           }`}
                         >
 
-                          {message.isRead
-                            ? "✓✓"
-                            : "✓"}
+                          <p className="break-words text-sm">
+                            {message.content}
+                          </p>
+
+
+                          {message.isRead && (
+
+                            <div
+                              className={`mt-1 text-[10px] ${
+                                isMine
+                                  ? "text-gray-300"
+                                  : "text-gray-400"
+                              }`}
+                            >
+                              Read
+                            </div>
+
+                          )}
 
                         </div>
 
                       </div>
 
-                    </div>
+                    );
 
-                  );
+                  }
+                )}
 
-                }
-              )}
 
-            </div>
+                <div
+                  ref={messagesEndRef}
+                />
 
-          )}
+              </div>
 
-        </div>
+            )}
 
-        <div className="flex gap-3 border-t bg-white p-4">
+          </div>
 
-          <input
-            type="text"
-            value={messageText}
-            onChange={(event) =>
-              setMessageText(
-                event.target.value
-              )
-            }
-            onKeyDown={
-              handleKeyDown
-            }
-            disabled={!connection}
-            placeholder={
-              connection
-                ? "Mesaj yaz..."
-                : "Bağlantı gözlənilir..."
-            }
-            className="flex-1 rounded-xl border border-gray-200 px-4 py-3 outline-none transition focus:border-black"
-          />
+          <div className="flex gap-2 border-t bg-white p-4">
 
-          <button
-            type="button"
-            onClick={sendMessage}
-            disabled={
-              !connection ||
-              !messageText.trim() ||
-              isSending
-            }
-            className="rounded-xl bg-black px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
-          >
+            <input
+              value={messageText}
+              onChange={(event) =>
+                setMessageText(
+                  event.target.value
+                )
+              }
+              onKeyDown={
+                handleKeyDown
+              }
+              placeholder="Mesaj yaz..."
+              disabled={!connection}
+              className="flex-1 rounded-xl border px-4 py-3 text-sm outline-none transition focus:border-black focus:ring-1 focus:ring-black"
+            />
 
-            {isSending
-              ? "Göndərilir..."
-              : "Göndər"}
 
-          </button>
+            <button
+              type="button"
+              onClick={
+                sendMessage
+              }
+              disabled={
+                !connection ||
+                !messageText.trim()
+              }
+              className="rounded-xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Göndər
+            </button>
+
+          </div>
 
         </div>
 
@@ -576,6 +671,8 @@ const MessageWindow = () => {
     </div>
 
   );
+
 };
+
 
 export default MessageWindow;

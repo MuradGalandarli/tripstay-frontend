@@ -47,8 +47,6 @@ const ConversationList = () => {
   return (
     <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
 
-      {/* HEADER */}
-
       <div className="border-b border-gray-100 px-5 py-4">
         <h2 className="text-xl font-semibold text-gray-900">
           Mesajlar
