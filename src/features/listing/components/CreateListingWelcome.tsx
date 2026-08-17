@@ -52,7 +52,7 @@ const CreateListingWelcome = () => {
                             <h1 className='text-[25px]'>{data?.data?.["createNewListing"]}</h1>
                         </div>
 
-                        <h1 className='text-[40px]'> > </h1>
+                        {/* <h1 className='text-[40px]'> ">" </h1> */}
                     </div>
                     <div className='w-[100%] h-[1px] text-3xl bg-black'></div>
                 </div>

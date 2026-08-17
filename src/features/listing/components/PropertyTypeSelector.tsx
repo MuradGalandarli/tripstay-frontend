@@ -40,9 +40,10 @@ const PropertyTypeSelector = () => {
     const translations = useGetTranslationQuery();
     const navigate = useNavigate();
     const AddStoreAndNextPage = (id: number) => {
-        navigate("/propertySpace")
+      
         setProperty(setPropertyTypeId(id))
         console.log(createProperty);
+          navigate("/propertySpace")
     }
 
     return (

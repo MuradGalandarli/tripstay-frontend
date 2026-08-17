@@ -10,6 +10,7 @@ import { useGetAllFavoriteQuery } from "../../fovorite/api/favoriteApi";
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [login] = useLoginMutation();
     const navigate = useNavigate();
@@ -21,29 +22,29 @@ const LoginForm = () => {
 
     const {
         data: favorites = [],
-        isSuccess: isFavoritesSuccess,
     } = useGetAllFavoriteQuery(undefined, {
         skip: !auth,
     });
 
-   useEffect(() => {
-    if (auth && favorites?.data) {
-        const favoriteIds = favorites.data.map(
-            (item) => item.propertyId
-        );
+    useEffect(() => {
+        if (auth && favorites?.data) {
+            const favoriteIds = favorites.data.map(
+                (item) => item.propertyId
+            );
 
-        console.log("Favorite IDs:", favoriteIds);
+            dispatch(setFavoriteLocal(favoriteIds));
 
-        dispatch(setFavoriteLocal(favoriteIds));
-
-        navigate("/");
-    }
-}, [auth, favorites, dispatch, navigate]);
+            navigate("/");
+        }
+    }, [auth, favorites, dispatch, navigate]);
 
     const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
     ) => {
         e.preventDefault();
+
+        // Əvvəlki error-u təmizlə
+        setErrorMessage("");
 
         try {
             const result = await login({
@@ -54,8 +55,13 @@ const LoginForm = () => {
             console.log("Login result:", result);
 
             dispatch(setAccessToken(result));
+
         } catch (error) {
             console.error("Login error:", error);
+
+            setErrorMessage(
+                "Email və ya şifrə yanlışdır."
+            );
         }
     };
 
@@ -67,9 +73,7 @@ const LoginForm = () => {
             >
                 <input
                     value={email}
-                    onChange={(e) =>
-                        setEmail(e.target.value)
-                    }
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50 rounded-[9px]"
                     type="text"
                     name="email"
@@ -78,19 +82,23 @@ const LoginForm = () => {
 
                 <input
                     value={password}
-                    onChange={(e) =>
-                        setPassword(e.target.value)
-                    }
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-[380px] h-[40px] p-[10px] focus:outline-none border-1 bg-amber-50 rounded-[9px]"
                     type="password"
                     name="password"
                     placeholder="Password"
                 />
 
+                {errorMessage && (
+                    <p className="text-red-500 text-sm">
+                        {errorMessage}
+                    </p>
+                )}
+
                 <input
                     type="submit"
-                    value="Sign Up"
-                    className="w-[380px] h-[40px] bg-amber-50 rounded-[9px]"
+                    value="Login"
+                    className="w-[380px] h-[40px] bg-amber-50 rounded-[9px] cursor-pointer"
                 />
             </form>
         </div>

@@ -61,10 +61,7 @@ function App() {
             <Route path='/register' element={<RegisterPage />} />
             <Route path="/detailProperty/:propertyId" element={<PropertyDetailPage />} />
             <Route path='/favorite' element={<FavoritePage />} />
-            <Route path='/chatPage/:propertyId' element={<ChatPage />} />
-            <Route path='/conversationPage' element={<ConversationPage />} />
-            <Route path="/messagePage/:conversationId" element={<MessageWindow />}
-/>
+
           </Route>
           <Route path='/listing' element={<CreatePropertyPage />} />
           <Route path='/propertyType' element={<PropertyTypeSelector />} />
@@ -78,6 +75,12 @@ function App() {
           <Route path='/createListingWelcome' element={<CreateListingWelcome />} />
           <Route path='/propertyCreatedSuccess' element={<PropertyCreatedSuccess />} />
           <Route path='/propertyCreatedFailed' element={<PropertyCreatedFailed />} />
+
+
+          <Route path='/chatPage/:propertyId' element={<ChatPage />} />
+          <Route path='/conversationPage' element={<ConversationPage />} />
+          <Route path="/messagePage/:conversationId" element={<MessageWindow />} />
+
         </Routes>
       </BrowserRouter>
     </>
