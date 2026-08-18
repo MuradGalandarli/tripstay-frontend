@@ -22,7 +22,7 @@ export interface PropertyByCityDto {
 export const cardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 
-    getAllCard: builder.query<{ data: Property[] }, void>({
+    getAllCard: builder.query<{ data: PropertyDto[] }, void>({
       query: () => ({
         url: "Property/get-all-property",
         method: "GET",

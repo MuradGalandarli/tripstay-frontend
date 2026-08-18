@@ -19,7 +19,7 @@ export const useChatConnection = () => {
   const dispatch = useAppDispatch();
 
   const accessToken = useAppSelector(
-    (state) => state.auth.token
+    (state) => state.auth.accessToken
   );
 
   useEffect(() => {
