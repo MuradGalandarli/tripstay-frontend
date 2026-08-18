@@ -19,7 +19,7 @@ export const authApi = baseApi.injectEndpoints({
         credentials: "include",
       }),
     }),
-    refresh: builder.mutation({
+    refresh: builder.mutation<string,void>({
       query: () => ({
         url: "Auth/refresh",
         method: "POST",
@@ -27,7 +27,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    logout: builder.mutation({
+    logout: builder.mutation<void,void>({
       query: () => ({
         url: "Auth/logout",
         method: "POST",

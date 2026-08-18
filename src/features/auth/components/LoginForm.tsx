@@ -8,6 +8,11 @@ import { setFavoriteLocal } from "../../fovorite/slice/favoriteSlice";
 import { useGetAllFavoriteQuery } from "../../fovorite/api/favoriteApi";
 
 const LoginForm = () => {
+
+interface Favorite {
+  propertyId: number;
+}
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -28,8 +33,8 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (auth && favorites?.data) {
-            const favoriteIds = favorites.data.map(
-                (item) => item.propertyId
+            const favoriteIds = favorites?.data?.map(
+                (item:Favorite) => item.propertyId
             );
 
             dispatch(setFavoriteLocal(favoriteIds));
@@ -43,7 +48,7 @@ const LoginForm = () => {
     ) => {
         e.preventDefault();
 
-        // Əvvəlki error-u təmizlə
+
         setErrorMessage("");
 
         try {

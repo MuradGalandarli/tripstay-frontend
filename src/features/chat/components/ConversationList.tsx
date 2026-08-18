@@ -44,10 +44,6 @@ const ConversationList = () => {
   return (
     <div className="min-h-screen w-full bg-gray-50">
 
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
-
       <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
 
         <div className="flex h-24 w-full items-center justify-between px-8 lg:px-12">
@@ -74,18 +70,9 @@ const ConversationList = () => {
 
       </header>
 
-
-      {/* =====================================================
-          MAIN
-      ===================================================== */}
-
       <main className="w-full px-6 py-8 lg:px-10 lg:py-10">
 
         <div className="w-full overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
-
-          {/* =================================================
-              TITLE
-          ================================================= */}
 
           <div className="border-b border-gray-100 px-8 py-7">
 
@@ -94,11 +81,6 @@ const ConversationList = () => {
             </h2>
 
           </div>
-
-
-          {/* =================================================
-              EMPTY
-          ================================================= */}
 
           {!conversations ||
           conversations.length === 0 ? (
@@ -116,10 +98,6 @@ const ConversationList = () => {
             </div>
 
           ) : (
-
-            /* =================================================
-               CONVERSATIONS
-            ================================================= */
 
             <div className="w-full">
 
@@ -139,20 +117,11 @@ const ConversationList = () => {
                     className="group flex min-h-[100px] w-full items-center gap-6 border-b border-gray-100 px-8 py-6 text-left transition hover:bg-gray-50 lg:px-10"
                   >
 
-                    {/* =================================================
-                        AVATAR
-                    ================================================= */}
-
                     <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gray-200 text-xl font-semibold text-gray-600">
                       {conversation.otherUserName
                         ?.charAt(0)
                         ?.toUpperCase()}
                     </div>
-
-
-                    {/* =================================================
-                        USER
-                    ================================================= */}
 
                     <div className="min-w-0 flex-1">
 
@@ -162,10 +131,6 @@ const ConversationList = () => {
 
                     </div>
 
-
-                    {/* =================================================
-                        ARROW
-                    ================================================= */}
 
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xl text-gray-400 transition group-hover:bg-gray-200 group-hover:text-gray-700">
                       →

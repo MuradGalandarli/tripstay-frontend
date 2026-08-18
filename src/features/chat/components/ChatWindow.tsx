@@ -150,7 +150,7 @@ export default function ChatWindow({
         const newConnection =
             new HubConnectionBuilder()
                 .withUrl(
-                    "https://localhost:7016/hubs/chat",
+                   "https://www.airbnb.somee.com/api/hubs/chat",
                     {
                         accessTokenFactory: () =>
                             accessToken,
@@ -595,9 +595,7 @@ export default function ChatWindow({
                             (message) => {
 
                                 const isMine =
-                                    message.senderId ===
-                                    currentUserId;
-
+    Number(message.senderId) === currentUserId;
                                 return (
 
                                     <div

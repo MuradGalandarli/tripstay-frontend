@@ -218,7 +218,7 @@ const MessageWindow = () => {
     const newConnection =
       new HubConnectionBuilder()
         .withUrl(
-          "https://localhost:7016/hubs/chat",
+          "https://www.airbnb.somee.com/api/hubs/chat",
           {
             accessTokenFactory: () =>
               accessToken,
@@ -567,10 +567,8 @@ const MessageWindow = () => {
                 {localMessages.map(
                   (message) => {
 
-                    const isMine =
-                      message.senderId ===
-                      currentUserId;
-
+                  const isMine =
+    Number(message.senderId) === currentUserId;
 
                     return (
 

@@ -3,7 +3,6 @@ import RegisterForm from "../components/RegisterForm"
 
 const RegisterPage = () => {
 
-  
   return (
     <div>
         <div className="w-[100%] h-[500px] flex items-center justify-center  bg-cover

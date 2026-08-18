@@ -17,7 +17,8 @@ export const createChatConnection = (
   chatConnection =
     new HubConnectionBuilder()
       .withUrl(
-        "https://localhost:7016/hubs/chat",
+        // "https://localhost:7016/hubs/chat",
+        "https://www.airbnb.somee.com/api/hubs/chat",
         {
           accessTokenFactory: () => {
             console.log(

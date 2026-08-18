@@ -2,7 +2,8 @@ import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../../app/store";
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: "https://localhost:7016/api",
+  
+  baseUrl: "https://www.airbnb.somee.com/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;

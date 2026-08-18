@@ -1,6 +1,5 @@
 import { useAppDispatch } from "../../../shared/hooks/useAppDispatch";
 import { setAccessToken } from "../slice/authSlice";
-import { useAppSelector } from "../../../shared/hooks/useAppSelector";
 import { useState } from "react";
 import { useRegisterMutation } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,6 @@ const RegisterForm = () => {
     const navigate = useNavigate();
 
     const dispatch = useAppDispatch();
-    const auth = useAppSelector((state) => (state.auth))
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -28,7 +26,6 @@ const RegisterForm = () => {
         if ('data' in result) {
             dispatch(setAccessToken(result.data))
             navigate('/');
-
         }
     }
 
@@ -49,7 +46,5 @@ const RegisterForm = () => {
 }
 
 export default RegisterForm
-function getAllFavorite() {
-    throw new Error("Function not implemented.");
-}
+
 
