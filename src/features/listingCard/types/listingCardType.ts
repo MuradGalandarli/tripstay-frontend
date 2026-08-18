@@ -1,4 +1,5 @@
 
 export interface PropertyByCityDto{
-cityId : number 
+cityId : number ,
+cityName: string
 }

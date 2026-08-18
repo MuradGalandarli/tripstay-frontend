@@ -25,8 +25,8 @@ const Card = () => {
     const [addFavorite] = useAddFavoriteMutation();
     const [removeFavorite] = useDeleteFavoriteMutation();
   
-    const { data } =
-        useGetPropertiesByCitiesQuery([121, 7, 5]);
+    const { data: citiesData } =
+    useGetPropertiesByCitiesQuery([121, 7, 5]);
 
     const handleFavorite = async (id: number) => {
         if (!userLogin)
@@ -112,7 +112,7 @@ const Card = () => {
             </div>
 
 
-            {data?.data?.map((city) => (
+            {citiesData?.data?.map((city) => (
 
                 <div
                     key={city.cityId}
@@ -135,7 +135,7 @@ const Card = () => {
 
                     <div className="flex gap-3 w-full overflow-x-auto overflow-y-hidden scrollbar-none">
 
-                        {city.properties.map((item) => (
+                        {city.properties?.map((item) => (
 
                             <div
                                 key={item.id}

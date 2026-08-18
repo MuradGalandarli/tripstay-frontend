@@ -1,17 +1,28 @@
-import { baseApi } from "../../../shared/api/baseApi";
-import type { PropertyByCityDto } from "../types/listingCardType";
 
-interface Property {
+import { baseApi } from "../../../shared/api/baseApi";
+
+
+export interface PropertyDto {
   id: number;
   title: string;
   imageUrl: string;
+  address: string;
   pricePerNight: number;
 }
+
+export interface PropertyByCityDto {
+  id: number;
+  cityId: number;
+  cityName: string;
+  properties: PropertyDto[];
+}
+
 
 
 export const cardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-   getAllCard: builder.query<{ data: Property[] }, void>({
+
+    getAllCard: builder.query<{ data: Property[] }, void>({
       query: () => ({
         url: "Property/get-all-property",
         method: "GET",
@@ -19,20 +30,23 @@ export const cardApi = baseApi.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
 
-   getPropertiesByCities: builder.query<PropertyByCityDto[], number[]>({
-  query: (cityIds) => ({
-    url: `/Property/get-properties-by-cities?${cityIds
-      .map((id) => `cityIds=${id}`)
-      .join("&")}`,
-    method: "GET",
-  }),
-  keepUnusedDataFor: 86400,
-}),
-
-
-
+    getPropertiesByCities: builder.query<
+      { data: PropertyByCityDto[] },
+      number[]
+    >({
+      query: (cityIds) => ({
+        url: `/Property/get-properties-by-cities?${cityIds
+          .map((id) => `cityIds=${id}`)
+          .join("&")}`,
+        method: "GET",
+      }),
+      keepUnusedDataFor: 86400,
+    }),
 
   }),
 });
 
-export const { useGetAllCardQuery, useGetPropertiesByCitiesQuery } = cardApi;
+export const {
+  useGetAllCardQuery,
+  useGetPropertiesByCitiesQuery,
+} = cardApi;

@@ -1,5 +1,4 @@
 import {
-  fetchBaseQuery,
   type BaseQueryFn,
   type FetchArgs,
   type FetchBaseQueryError,

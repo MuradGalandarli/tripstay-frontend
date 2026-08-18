@@ -8,7 +8,7 @@ import type {
 
 export const propertyTypeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPropertyType: builder.query<PropertyType[], void>({
+   getPropertyType: builder.query<{ data: PropertyType[] }, void>({
       query: () => ({
         url: "PropertyType/get-all-propertyType",
         method: "GET",

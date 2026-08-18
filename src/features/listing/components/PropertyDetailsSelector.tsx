@@ -1,6 +1,6 @@
 
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setDetails } from "../slice/propertySlice";
 import { useState } from "react";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
