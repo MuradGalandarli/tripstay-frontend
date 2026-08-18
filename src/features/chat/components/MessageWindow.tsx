@@ -218,7 +218,8 @@ const MessageWindow = () => {
     const newConnection =
       new HubConnectionBuilder()
         .withUrl(
-          "https://www.airbnb.somee.com/api/hubs/chat",
+          "https://www.airbnb.somee.com/hubs/chat",
+          
           {
             accessTokenFactory: () =>
               accessToken,
