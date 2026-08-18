@@ -11,9 +11,10 @@ export interface AmenityType{
   icone:string
 }
 
-export interface CityType{
-  id:number,
-  name:string
+export interface CityType {
+  id: number;
+  name: string;
+  countryId: number;
 }
 
 export interface CountryType{

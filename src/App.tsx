@@ -5,7 +5,7 @@ import MainLayout from './shared/layouts/MainLayout'
 import Card from "./features/listingCard/page/Card"
 import LoginPage from './features/auth/pages/LoginPage'
 import RegisterPage from './features/auth/pages/RegisterPage'
-import { setAccessToken, setCredentials } from './features/auth/slice/authSlice'
+import { setAccessToken } from './features/auth/slice/authSlice'
 import { useAppDispatch } from './shared/hooks/useAppDispatch'
 import { useRefreshMutation } from "./features/auth/api/authApi"
 import CreatePropertyPage from './features/listing/page/CreatePropertyPage'

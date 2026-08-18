@@ -17,7 +17,7 @@ export const propertyTypeApi = baseApi.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
 
-    getAmenity: builder.query<AmenityType[], void>({
+   getAmenity: builder.query<{ data: AmenityType[] }, void>({
       query: () => ({
         url: "/Amenity/get-all-amenity",
         method: "GET",
@@ -26,22 +26,22 @@ export const propertyTypeApi = baseApi.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
 
-    getCity: builder.query<CityType[], void>({
-      query: () => ({
-        url: "City/get-all-city",
-        method: "GET",
-        credentials: "include",
-      }),
-      keepUnusedDataFor: 86400,
-    }),
-
-getCountry:builder.query<CountryType,void>({
-  query:()=>({
-    url:"Country/get-all-country",
-    method:"GET",
-    credentials:"include"
+   getCity: builder.query<{ data: CityType[] }, void>({
+  query: () => ({
+    url: "City/get-all-city",
+    method: "GET",
+    credentials: "include",
   }),
-  keepUnusedDataFor:86400
+  keepUnusedDataFor: 86400,
+}),
+
+getCountry: builder.query<{ data: CountryType[] }, void>({
+  query: () => ({
+    url: "Country/get-all-country",
+    method: "GET",
+    credentials: "include",
+  }),
+  keepUnusedDataFor: 86400,
 }),
 
 createProperty : builder.mutation<any,FormData>({

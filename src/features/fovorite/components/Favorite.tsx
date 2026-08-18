@@ -1,12 +1,13 @@
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from '../api/favoriteApi';
 import { useAppSelector } from '../../../shared/hooks/useAppSelector';
-import { useGetAllCardQuery, useGetPropertiesByCitiesQuery } from '../../listingCard/api/cardApi';
+import { useGetAllCardQuery } from '../../listingCard/api/cardApi';
 import { removeFavoriteLocal } from '../slice/favoriteSlice';
 import { IoHeartOutline } from "react-icons/io5";
 import favoriteImg from "../../../assets/FavoriteImage/img.png"
 import { useNavigate } from 'react-router-dom';
+import { addFavoriteLocal } from "../slice/favoriteSlice";
 
 const Favorite = () => {
 
@@ -15,7 +16,7 @@ const Favorite = () => {
     const [addFavorite] = useAddFavoriteMutation();
     const [removeFavorite] = useDeleteFavoriteMutation();
     const dispatch = useDispatch();
-    const { data = [] } = useGetAllCardQuery();
+    const { data } = useGetAllCardQuery();
     const navigation = useNavigate();
    
     const selectedProperty = data?.data?.filter(property => favoriteIds.includes(property.id))
@@ -55,7 +56,7 @@ const Favorite = () => {
       </div>
     ) : (
       <div className="flex gap-3 w-full overflow-x-auto overflow-y-hidden scrollbar-none">
-        {selectedProperty.map((item) => (
+        {selectedProperty?.map((item) => (
           <div
             key={item.id}
             className="h-auto w-[200px] flex-shrink-0 flex flex-col gap-2 relative m-[20px]"

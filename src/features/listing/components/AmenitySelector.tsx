@@ -72,7 +72,7 @@ const AmenitySelector = () => {
 
         <div className="flex flex-wrap gap-8">
           {data?.data?.map((item) => {
-            const Icon = iconMap[item.icon as keyof typeof iconMap];
+            const Icon = iconMap[item.icone as keyof typeof iconMap];
 
             const isSelected = selectedAmenities.includes(item.id);
 

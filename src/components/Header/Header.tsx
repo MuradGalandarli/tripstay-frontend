@@ -84,10 +84,6 @@ const Header = () => {
   }, []);
 
 
-  const handleConversationList = ()=>{
-    navigate("/conversationList")
-  }
-
   if (result.isLoading) {
     return <div>Loading...</div>;
   }

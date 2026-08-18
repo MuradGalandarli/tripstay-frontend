@@ -11,7 +11,6 @@ import { MdCabin } from "react-icons/md";
 import { useGetPropertyTypeQuery } from "../api/propertyTypeApi";
 import { useGetTranslationQuery } from "../../translation/Api/translationApi";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../shared/hooks/useAppSelector";
 import { useAppDispatch } from "../../../shared/hooks/useAppDispatch";
 import { setPropertyTypeId } from "../slice/propertySlice"
 
@@ -32,18 +31,14 @@ const PropertyTypeSelector = () => {
 
     const setProperty = useAppDispatch();
 
-    const createProperty = useAppSelector(
-        (state) => state.property
-    );
 
     const { data } = useGetPropertyTypeQuery();
     const translations = useGetTranslationQuery();
     const navigate = useNavigate();
     const AddStoreAndNextPage = (id: number) => {
-      
+
         setProperty(setPropertyTypeId(id))
-        console.log(createProperty);
-          navigate("/propertySpace")
+        navigate("/propertySpace")
     }
 
     return (
@@ -63,21 +58,25 @@ const PropertyTypeSelector = () => {
                     <div className="w-[100%] h-auto flex flex-wrap gap-[38px]">
 
                         {
-                            data?.data?.map((item: string) => {
-                                const Icon = iconMap[item.icone]
-
+                            data?.data?.map((item) => {
+                                const Icon = iconMap[item.icone as keyof typeof iconMap];
 
                                 return (
-                                    <>
+                                    <div
+                                        onClick={() => AddStoreAndNextPage(item.id)}
+                                        key={item.id}
+                                        className="w-[30%] h-[100px] p-[10px] border rounded-2xl text-[#f2f1ed] hover:text-black"
+                                    >
+                                        {Icon && <Icon className="text-[30px] text-black" />}
 
-                                        <div onClick={() => (AddStoreAndNextPage(item.id))} key={item.id} className="w-[30%] h-[100px] p-[10px] border-1 rounded-2xl text-[#f2f1ed] hover:text-black">
-                                            {Icon && <Icon className="text-[30px] text-black" />}
-                                            <h1 className="text-[25px]">{item.name}</h1>
-                                        </div>
-                                    </>)
+                                        <h1 className="text-[25px]">
+                                            {item.name}
+                                        </h1>
+                                    </div>
+                                );
                             })
                         }
-                      
+
                     </div>
                 </div>
             </div>
