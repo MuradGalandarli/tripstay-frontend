@@ -36,7 +36,7 @@ const filteredProperties: PropertyDto[] = searchText.trim()
     const [removeFavorite] = useDeleteFavoriteMutation();
   
     const { data: citiesData } =
-    useGetPropertiesByCitiesQuery([121, 7, 5]);
+    useGetPropertiesByCitiesQuery([352, 652, 672,667,408]);
 
     const handleFavorite = async (id: number) => {
         if (!userLogin)
