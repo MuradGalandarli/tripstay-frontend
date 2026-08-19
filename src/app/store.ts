@@ -6,6 +6,7 @@ import languageReducer from "../features/language/slice/languageSlice"
 import propertyReducer from "../features/listing/slice/propertySlice"
 import favoriteReducer from "../features/fovorite/slice/favoriteSlice"
 import chatReducer from "../features/chat/slice/chatSlice";
+import searchReducer from "../shared/slice/searchSlice";
 
 export const store = configureStore({
   
@@ -15,6 +16,7 @@ export const store = configureStore({
    property: propertyReducer,
    favorite: favoriteReducer,
    chat: chatReducer,
+    search: searchReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   

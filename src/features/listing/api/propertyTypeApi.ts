@@ -50,7 +50,8 @@ createProperty : builder.mutation<any,FormData>({
     method:"POST",
     body:formData
 
-  })
+  }),
+   invalidatesTags: ["Properties"]
 })
 
 

@@ -27,6 +27,7 @@ export const cardApi = baseApi.injectEndpoints({
         url: "Property/get-all-property",
         method: "GET",
       }),
+       providesTags: ["Properties"],
       keepUnusedDataFor: 86400,
     }),
 
@@ -40,6 +41,7 @@ export const cardApi = baseApi.injectEndpoints({
           .join("&")}`,
         method: "GET",
       }),
+       providesTags: ["Properties"],
       keepUnusedDataFor: 86400,
     }),
 

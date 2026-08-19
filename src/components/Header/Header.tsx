@@ -14,6 +14,7 @@ import { useAppDispatch } from "../../shared/hooks/useAppDispatch";
 import { logoutAction } from "../../features/auth/slice/authSlice"
 import { clearFavorites } from "../../features/fovorite/slice/favoriteSlice";
 import { FaRegMessage } from "react-icons/fa6";
+import { setSearchText } from "../../shared/slice/searchSlice";
 
 
 
@@ -27,7 +28,7 @@ const Header = () => {
   const result = useGetTranslationQuery();
   const [isHostMode, setIsHostMode] = useState(false);
   const translation = result?.data?.data;
-
+const [searchText, setSearchInput] = useState("");
   const dispatch = useAppDispatch();
 
   let token = useAppSelector(
@@ -186,10 +187,17 @@ const Header = () => {
 
                 <div className="w-[800px] h-[60px] shadow-xl/30 bg-white rounded-[100px] flex justify-around items-center">
 
-                  <div>
-                    <p >{translation?.["header.Yer"]}</p>
-                    <p className="text-[#b5b0b0]">{translation?.["header.Gidilecek"]}</p>
-                  </div>
+                <div>
+  <p>{translation?.["header.Yer"]}</p>
+  <input
+  type="text"
+  value={searchText}
+  onChange={(e) =>  dispatch(setSearchText(e.target.value), setSearchInput(e.target.value))}
+  placeholder={translation?.["header.Gidilecek"]}
+
+  className="outline-none border-none w-[180px] h-[25px] text-sm bg-transparent"
+/>
+</div>
                   <div className=" w-[1px] h-[30px]  bg-[#b5b0b0]"></div>
                   <div>
                     <p>{translation?.["header.zaman"]}</p>
@@ -200,9 +208,11 @@ const Header = () => {
                     <p >{translation?.["header.Kişiler"]}</p>
                     <p className="text-[#b5b0b0]">{translation?.["header.Misafir"]}</p>
                   </div>
-                  <div className="w-[40px] h-[40px] rounded-[100%] bg-[#c7283d] flex items-center justify-center">
-                    <IoSearchSharp className="text-white" />
-                  </div>
+<div
+  className="w-[40px] h-[40px] rounded-[100%] bg-[#c7283d] flex items-center justify-center cursor-pointer"
+>
+  <IoSearchSharp className="text-white" />
+</div>
 
                 </div>
               </div>
